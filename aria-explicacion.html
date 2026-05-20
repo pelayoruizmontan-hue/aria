@@ -1,0 +1,1205 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aria IA — Cómo Funciona</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,700;1,300&display=swap');
+
+:root {
+  --black: #080808;
+  --white: #F5F2ED;
+  --gray: #888;
+  --line: rgba(245,242,237,0.12);
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--black);
+  color: var(--white);
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 300;
+  overflow-x: hidden;
+  cursor: none;
+}
+
+/* CURSOR */
+.cursor {
+  width: 8px; height: 8px;
+  background: var(--white);
+  border-radius: 50%;
+  position: fixed;
+  pointer-events: none;
+  z-index: 9999;
+  transition: transform 0.15s ease;
+  mix-blend-mode: difference;
+}
+.cursor-follower {
+  width: 32px; height: 32px;
+  border: 1px solid rgba(245,242,237,0.4);
+  border-radius: 50%;
+  position: fixed;
+  pointer-events: none;
+  z-index: 9998;
+  transition: all 0.12s ease;
+  mix-blend-mode: difference;
+}
+
+/* NOISE TEXTURE */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9997;
+  opacity: 0.4;
+}
+
+/* HERO */
+.hero {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 0 40px;
+  position: relative;
+  overflow: hidden;
+  border-bottom: 1px solid var(--line);
+}
+
+.hero-grid {
+  position: absolute;
+  inset: 0;
+  background-image: 
+    linear-gradient(var(--line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--line) 1px, transparent 1px);
+  background-size: 80px 80px;
+  mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 40%, transparent 100%);
+}
+
+.hero-tag {
+  font-size: 11px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--gray);
+  margin-bottom: 24px;
+  opacity: 0;
+  animation: fadeUp 0.8s 0.2s forwards;
+}
+
+.hero-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(80px, 14vw, 180px);
+  line-height: 0.9;
+  letter-spacing: -2px;
+  opacity: 0;
+  animation: fadeUp 0.8s 0.4s forwards;
+}
+
+.hero-title span {
+  display: block;
+  -webkit-text-stroke: 1px rgba(245,242,237,0.3);
+  color: transparent;
+}
+
+.hero-sub {
+  margin-top: 32px;
+  font-size: 16px;
+  color: var(--gray);
+  max-width: 480px;
+  line-height: 1.7;
+  opacity: 0;
+  animation: fadeUp 0.8s 0.6s forwards;
+}
+
+.hero-scroll {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  font-size: 10px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--gray);
+  opacity: 0;
+  animation: fadeUp 0.8s 1s forwards;
+}
+
+.scroll-line {
+  width: 1px;
+  height: 60px;
+  background: linear-gradient(to bottom, var(--white), transparent);
+  animation: scrollLine 2s ease-in-out infinite;
+}
+
+@keyframes scrollLine {
+  0%, 100% { transform: scaleY(0); transform-origin: top; }
+  50% { transform: scaleY(1); transform-origin: top; }
+}
+
+/* SECTIONS */
+section {
+  padding: 120px 40px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.section-num {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 11px;
+  letter-spacing: 4px;
+  color: var(--gray);
+  margin-bottom: 16px;
+}
+
+.section-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(48px, 6vw, 80px);
+  line-height: 1;
+  letter-spacing: -1px;
+  margin-bottom: 24px;
+}
+
+.section-body {
+  font-size: 15px;
+  color: var(--gray);
+  max-width: 520px;
+  line-height: 1.8;
+  margin-bottom: 60px;
+}
+
+/* DIVIDER */
+.divider {
+  width: 100%;
+  height: 1px;
+  background: var(--line);
+}
+
+/* FLOW ANIMATION */
+.flow-container {
+  position: relative;
+  padding: 80px 40px;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  overflow: hidden;
+}
+
+.flow-bg {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 60% 60% at 50% 50%, rgba(245,242,237,0.03) 0%, transparent 70%);
+}
+
+.flow-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(40px, 5vw, 64px);
+  text-align: center;
+  margin-bottom: 80px;
+  letter-spacing: -1px;
+}
+
+.flow-steps {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  flex-wrap: wrap;
+  max-width: 1100px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.flow-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  width: 160px;
+  position: relative;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.6s ease;
+}
+
+.flow-step.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.flow-step-icon {
+  width: 72px; height: 72px;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+  margin-bottom: 16px;
+  position: relative;
+  background: var(--black);
+  transition: border-color 0.3s ease, transform 0.3s ease;
+}
+
+.flow-step:hover .flow-step-icon {
+  border-color: var(--white);
+  transform: scale(1.1);
+}
+
+.flow-step-icon::after {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  border: 1px solid rgba(245,242,237,0.06);
+}
+
+.flow-arrow {
+  width: 60px;
+  height: 1px;
+  background: var(--line);
+  position: relative;
+  flex-shrink: 0;
+  margin-bottom: 32px;
+}
+
+.flow-arrow::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: -3px;
+  width: 6px; height: 6px;
+  border-right: 1px solid var(--gray);
+  border-top: 1px solid var(--gray);
+  transform: rotate(45deg);
+}
+
+.flow-arrow .flow-dot {
+  position: absolute;
+  width: 6px; height: 6px;
+  background: var(--white);
+  border-radius: 50%;
+  top: -2.5px;
+  left: 0;
+  animation: moveDot 2s ease-in-out infinite;
+}
+
+@keyframes moveDot {
+  0% { left: 0; opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { left: calc(100% - 6px); opacity: 0; }
+}
+
+.flow-step-label {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+.flow-step-desc {
+  font-size: 11px;
+  color: var(--gray);
+  line-height: 1.5;
+}
+
+/* WHATSAPP DEMO */
+.demo-section {
+  padding: 120px 40px;
+  border-top: 1px solid var(--line);
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.demo-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+}
+
+.demo-phone {
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+
+.phone-frame {
+  width: 280px;
+  background: #111;
+  border-radius: 36px;
+  border: 1px solid rgba(255,255,255,0.1);
+  overflow: hidden;
+  box-shadow: 0 40px 80px rgba(0,0,0,0.6);
+  position: relative;
+}
+
+.phone-notch {
+  width: 80px;
+  height: 24px;
+  background: #111;
+  border-radius: 0 0 16px 16px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 2;
+}
+
+.phone-screen {
+  background: #0a0a0a;
+  min-height: 480px;
+  padding: 0;
+}
+
+.wa-header {
+  background: #1a1a1a;
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+.wa-avatar {
+  width: 36px; height: 36px;
+  background: linear-gradient(135deg, #333, #222);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+}
+
+.wa-name { font-size: 12px; font-weight: 600; color: var(--white); }
+.wa-status { font-size: 10px; color: #25D366; }
+
+.wa-messages {
+  padding: 16px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.msg {
+  max-width: 85%;
+  padding: 8px 12px;
+  border-radius: 12px;
+  font-size: 11px;
+  line-height: 1.5;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: all 0.4s ease;
+}
+
+.msg.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.msg-aria {
+  background: #1e1e1e;
+  color: var(--white);
+  align-self: flex-start;
+  border-bottom-left-radius: 4px;
+}
+
+.msg-user {
+  background: #2a3942;
+  color: var(--white);
+  align-self: flex-end;
+  border-bottom-right-radius: 4px;
+}
+
+.msg-time {
+  font-size: 9px;
+  color: var(--gray);
+  text-align: right;
+  margin-top: 2px;
+}
+
+.typing {
+  display: flex;
+  gap: 3px;
+  align-items: center;
+  padding: 8px 12px;
+  background: #1e1e1e;
+  border-radius: 12px;
+  align-self: flex-start;
+  width: fit-content;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.typing.visible { opacity: 1; }
+
+.typing span {
+  width: 5px; height: 5px;
+  background: var(--gray);
+  border-radius: 50%;
+  animation: bounce 1.2s ease-in-out infinite;
+}
+
+.typing span:nth-child(2) { animation-delay: 0.2s; }
+.typing span:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes bounce {
+  0%, 60%, 100% { transform: translateY(0); }
+  30% { transform: translateY(-4px); }
+}
+
+/* FEATURES */
+.features-section {
+  padding: 120px 40px;
+  border-top: 1px solid var(--line);
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--line);
+  border: 1px solid var(--line);
+  margin-top: 60px;
+}
+
+.feature-item {
+  background: var(--black);
+  padding: 40px 32px;
+  transition: background 0.3s ease;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all 0.5s ease;
+}
+
+.feature-item.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.feature-item:hover { background: rgba(245,242,237,0.03); }
+
+.feature-emoji { font-size: 28px; margin-bottom: 20px; display: block; }
+
+.feature-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 22px;
+  letter-spacing: 1px;
+  margin-bottom: 12px;
+}
+
+.feature-desc { font-size: 13px; color: var(--gray); line-height: 1.7; }
+
+/* CHANNELS */
+.channels-section {
+  padding: 120px 40px;
+  border-top: 1px solid var(--line);
+  text-align: center;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.channels-grid {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  flex-wrap: wrap;
+  margin-top: 60px;
+}
+
+.channel-card {
+  width: 140px;
+  padding: 32px 20px;
+  border: 1px solid var(--line);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  transition: all 0.3s ease;
+  cursor: default;
+  opacity: 0;
+  transform: scale(0.95);
+  transition: all 0.5s ease;
+}
+
+.channel-card.visible {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.channel-card:hover {
+  border-color: rgba(245,242,237,0.4);
+  background: rgba(245,242,237,0.03);
+  transform: translateY(-4px) scale(1.02);
+}
+
+.channel-icon { font-size: 32px; }
+.channel-name { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--gray); }
+
+/* STATS */
+.stats-section {
+  padding: 120px 40px;
+  border-top: 1px solid var(--line);
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: var(--line);
+  border: 1px solid var(--line);
+  margin-top: 60px;
+}
+
+.stat-item {
+  background: var(--black);
+  padding: 48px 32px;
+  text-align: center;
+  opacity: 0;
+  transition: all 0.6s ease;
+}
+
+.stat-item.visible { opacity: 1; }
+
+.stat-num {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 64px;
+  line-height: 1;
+  letter-spacing: -2px;
+  display: block;
+  counter-reset: num;
+}
+
+.stat-label { font-size: 12px; color: var(--gray); margin-top: 8px; letter-spacing: 1px; }
+
+/* CTA */
+.cta-section {
+  padding: 160px 40px;
+  border-top: 1px solid var(--line);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.cta-bg {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 50% 80% at 50% 100%, rgba(245,242,237,0.04) 0%, transparent 70%);
+}
+
+.cta-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(60px, 10vw, 140px);
+  line-height: 0.9;
+  letter-spacing: -2px;
+  position: relative;
+  margin-bottom: 40px;
+}
+
+.cta-sub {
+  font-size: 15px;
+  color: var(--gray);
+  max-width: 400px;
+  margin: 0 auto 48px;
+  line-height: 1.7;
+  position: relative;
+}
+
+.cta-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--white);
+  color: var(--black);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 18px 40px;
+  border: none;
+  cursor: none;
+  position: relative;
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+
+.cta-btn:hover { background: #ddd; transform: translateY(-2px); }
+
+.cta-btn-arrow {
+  width: 16px; height: 16px;
+  border-right: 2px solid var(--black);
+  border-top: 2px solid var(--black);
+  transform: rotate(45deg);
+  transition: transform 0.3s ease;
+}
+
+.cta-btn:hover .cta-btn-arrow { transform: rotate(45deg) translate(3px, -3px); }
+
+/* FOOTER */
+footer {
+  padding: 40px;
+  border-top: 1px solid var(--line);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  color: var(--gray);
+  letter-spacing: 1px;
+}
+
+/* ANIMATIONS */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* COUNTER ANIMATION */
+.count-up { display: inline-block; }
+
+/* TELEGRAM NOTIFICATION */
+.telegram-notif {
+  position: fixed;
+  bottom: 40px;
+  right: 40px;
+  background: #1a1a1a;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 12px;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 12px;
+  z-index: 100;
+  transform: translateY(100px);
+  opacity: 0;
+  transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  max-width: 300px;
+}
+
+.telegram-notif.show {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.tg-icon { font-size: 24px; flex-shrink: 0; }
+.tg-content {}
+.tg-title { font-weight: 600; margin-bottom: 2px; color: var(--white); }
+.tg-msg { color: var(--gray); font-size: 11px; line-height: 1.4; }
+
+/* PROCESS SECTION */
+.process-section {
+  padding: 120px 40px;
+  border-top: 1px solid var(--line);
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.process-list {
+  margin-top: 60px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.process-item {
+  display: grid;
+  grid-template-columns: 80px 1fr;
+  gap: 40px;
+  padding: 40px 0;
+  border-bottom: 1px solid var(--line);
+  align-items: start;
+  opacity: 0;
+  transform: translateX(-20px);
+  transition: all 0.6s ease;
+}
+
+.process-item.visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.process-num {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 48px;
+  color: rgba(245,242,237,0.15);
+  line-height: 1;
+}
+
+.process-content {}
+
+.process-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 28px;
+  letter-spacing: 1px;
+  margin-bottom: 10px;
+}
+
+.process-desc { font-size: 14px; color: var(--gray); line-height: 1.7; max-width: 600px; }
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .demo-grid { grid-template-columns: 1fr; }
+  .features-grid { grid-template-columns: 1fr; }
+  .stats-grid { grid-template-columns: 1fr 1fr; }
+  .flow-steps { gap: 20px; }
+  .flow-arrow { display: none; }
+  footer { flex-direction: column; gap: 16px; text-align: center; }
+}
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-follower" id="cursorFollower"></div>
+
+<!-- TELEGRAM NOTIFICATION -->
+<div class="telegram-notif" id="tgNotif">
+  <div class="tg-icon">📱</div>
+  <div class="tg-content">
+    <div class="tg-title">🏠 Nueva cita agendada</div>
+    <div class="tg-msg">Juan García · Alquiler Chamberí · 1.200€/mes · Urgencia ALTA</div>
+  </div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-tag">Sistema de Automatización Inmobiliaria</div>
+  <h1 class="hero-title">
+    Así funciona
+    <span>Aria IA</span>
+  </h1>
+  <p class="hero-sub">
+    Un sistema completo que atiende, cualifica y agenda automáticamente. Sin intervención humana. 24 horas al día.
+  </p>
+  <div class="hero-scroll">
+    <div class="scroll-line"></div>
+    Scroll
+  </div>
+</div>
+
+<!-- FLOW -->
+<div class="flow-container">
+  <div class="flow-bg"></div>
+  <h2 class="flow-title">El flujo completo</h2>
+  <div class="flow-steps" id="flowSteps">
+
+    <div class="flow-step">
+      <div class="flow-step-icon">📲</div>
+      <div class="flow-step-label">Cliente escribe</div>
+      <div class="flow-step-desc">WhatsApp, web o formulario</div>
+    </div>
+
+    <div class="flow-arrow"><div class="flow-dot"></div></div>
+
+    <div class="flow-step">
+      <div class="flow-step-icon">🧠</div>
+      <div class="flow-step-label">Aria responde</div>
+      <div class="flow-step-desc">En menos de 2 segundos</div>
+    </div>
+
+    <div class="flow-arrow"><div class="flow-dot"></div></div>
+
+    <div class="flow-step">
+      <div class="flow-step-icon">🔍</div>
+      <div class="flow-step-label">Cualifica</div>
+      <div class="flow-step-desc">Zona, presupuesto, urgencia</div>
+    </div>
+
+    <div class="flow-arrow"><div class="flow-dot"></div></div>
+
+    <div class="flow-step">
+      <div class="flow-step-icon">🏠</div>
+      <div class="flow-step-label">Busca propiedades</div>
+      <div class="flow-step-desc">En tu catálogo real</div>
+    </div>
+
+    <div class="flow-arrow"><div class="flow-dot"></div></div>
+
+    <div class="flow-step">
+      <div class="flow-step-icon">📅</div>
+      <div class="flow-step-label">Agenda cita</div>
+      <div class="flow-step-desc">Google Calendar automático</div>
+    </div>
+
+    <div class="flow-arrow"><div class="flow-dot"></div></div>
+
+    <div class="flow-step">
+      <div class="flow-step-icon">📱</div>
+      <div class="flow-step-label">Avisa al asesor</div>
+      <div class="flow-step-desc">Telegram instantáneo</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- DEMO WHATSAPP -->
+<div class="demo-section">
+  <div class="demo-grid">
+    <div>
+      <div class="section-num">02 — DEMO EN VIVO</div>
+      <h2 class="section-title">Conversación real por WhatsApp</h2>
+      <p class="section-body">
+        Aria mantiene conversaciones naturales en español. Recoge todos los datos del cliente sin que el asesor tenga que intervenir. Funciona igual de noche que de día.
+      </p>
+      <div style="display: flex; flex-direction: column; gap: 16px;">
+        <div style="display: flex; align-items: center; gap: 12px; font-size: 13px; color: var(--gray);">
+          <span style="width: 6px; height: 6px; background: #25D366; border-radius: 50; flex-shrink: 0; border-radius: 50%;"></span>
+          Responde en menos de 2 segundos
+        </div>
+        <div style="display: flex; align-items: center; gap: 12px; font-size: 13px; color: var(--gray);">
+          <span style="width: 6px; height: 6px; background: #25D366; border-radius: 50%; flex-shrink: 0;"></span>
+          Detecta zona, presupuesto y urgencia
+        </div>
+        <div style="display: flex; align-items: center; gap: 12px; font-size: 13px; color: var(--gray);">
+          <span style="width: 6px; height: 6px; background: #25D366; border-radius: 50%; flex-shrink: 0;"></span>
+          Agenda sin ayuda humana
+        </div>
+        <div style="display: flex; align-items: center; gap: 12px; font-size: 13px; color: var(--gray);">
+          <span style="width: 6px; height: 6px; background: #25D366; border-radius: 50%; flex-shrink: 0;"></span>
+          Notifica al asesor por Telegram
+        </div>
+      </div>
+    </div>
+
+    <div class="demo-phone">
+      <div class="phone-frame">
+        <div class="phone-notch"></div>
+        <div class="phone-screen">
+          <div class="wa-header">
+            <div class="wa-avatar">🏠</div>
+            <div>
+              <div class="wa-name">Aria — Inmobiliaria Demo</div>
+              <div class="wa-status">● En línea</div>
+            </div>
+          </div>
+          <div class="wa-messages" id="waMessages">
+            <div class="typing" id="typing1"><span></span><span></span><span></span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PROCESS -->
+<div class="process-section">
+  <div class="section-num">03 — PASO A PASO</div>
+  <h2 class="section-title">Cómo lo hace Aria</h2>
+
+  <div class="process-list" id="processList">
+    <div class="process-item">
+      <div class="process-num">01</div>
+      <div class="process-content">
+        <div class="process-title">El cliente escribe por WhatsApp o web</div>
+        <div class="process-desc">Aria recibe el mensaje al instante. No importa si es domingo a las 3 de la mañana — responde en menos de 2 segundos con un saludo personalizado.</div>
+      </div>
+    </div>
+    <div class="process-item">
+      <div class="process-num">02</div>
+      <div class="process-content">
+        <div class="process-title">Aria hace las preguntas correctas</div>
+        <div class="process-desc">Una a una, sin agobiar. Zona preferida, presupuesto máximo, número de habitaciones, plazo. Recopila todo lo que el asesor necesita saber antes de llamar.</div>
+      </div>
+    </div>
+    <div class="process-item">
+      <div class="process-num">03</div>
+      <div class="process-content">
+        <div class="process-title">Busca propiedades en tu catálogo real</div>
+        <div class="process-desc">Consulta tu Google Sheets en tiempo real y muestra solo las propiedades que encajan con el perfil del cliente. Nada inventado, todo de tu catálogo.</div>
+      </div>
+    </div>
+    <div class="process-item">
+      <div class="process-num">04</div>
+      <div class="process-content">
+        <div class="process-title">Agenda la cita automáticamente</div>
+        <div class="process-desc">Aria consulta tu Google Calendar, encuentra huecos libres y crea el evento sin que toques nada. El cliente recibe la confirmación por email.</div>
+      </div>
+    </div>
+    <div class="process-item">
+      <div class="process-num">05</div>
+      <div class="process-content">
+        <div class="process-title">Te avisa por Telegram con todos los datos</div>
+        <div class="process-desc">Nombre, teléfono, email, presupuesto, zona, urgencia y fecha de la cita. Todo en un mensaje. Tú solo tienes que llamar.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FEATURES -->
+<div class="features-section">
+  <div class="section-num">04 — FUNCIONALIDADES</div>
+  <h2 class="section-title">Todo incluido</h2>
+
+  <div class="features-grid" id="featuresGrid">
+    <div class="feature-item">
+      <span class="feature-emoji">🤖</span>
+      <div class="feature-title">IA Conversacional</div>
+      <div class="feature-desc">Conversaciones naturales en español. Entiende contexto, detecta urgencia y adapta el tono al cliente.</div>
+    </div>
+    <div class="feature-item">
+      <span class="feature-emoji">📅</span>
+      <div class="feature-title">Agenda Automática</div>
+      <div class="feature-desc">Integración nativa con Google Calendar. Crea eventos, envía confirmaciones y gestiona la agenda sin intervención.</div>
+    </div>
+    <div class="feature-item">
+      <span class="feature-emoji">🏠</span>
+      <div class="feature-title">Catálogo en Tiempo Real</div>
+      <div class="feature-desc">Conectado a tu Google Sheets. Actualiza propiedades editando una hoja de cálculo. Sin código.</div>
+    </div>
+    <div class="feature-item">
+      <span class="feature-emoji">📊</span>
+      <div class="feature-title">Scoring de Leads</div>
+      <div class="feature-desc">Clasifica automáticamente cada lead por urgencia: Alta, Media o Baja. Prioriza tu tiempo en los que más importan.</div>
+    </div>
+    <div class="feature-item">
+      <span class="feature-emoji">🔔</span>
+      <div class="feature-title">Alertas Instantáneas</div>
+      <div class="feature-desc">Telegram al asesor cuando se agenda una cita. Telegram al programador si algo falla. Siempre informado.</div>
+    </div>
+    <div class="feature-item">
+      <span class="feature-emoji">⚙️</span>
+      <div class="feature-title">Configuración Sin Código</div>
+      <div class="feature-desc">La agencia rellena un formulario con sus datos y el sistema se actualiza solo. Sin tocar n8n ni código.</div>
+    </div>
+  </div>
+</div>
+
+<!-- CHANNELS -->
+<div class="channels-section">
+  <div class="section-num">05 — CANALES</div>
+  <h2 class="section-title">Aria está en todos lados</h2>
+  <p style="font-size: 15px; color: var(--gray); max-width: 400px; margin: 16px auto 0; line-height: 1.7;">
+    El cliente puede contactar desde donde prefiera. Aria responde igual en todos los canales.
+  </p>
+
+  <div class="channels-grid" id="channelsGrid">
+    <div class="channel-card">
+      <div class="channel-icon">💬</div>
+      <div class="channel-name">WhatsApp</div>
+    </div>
+    <div class="channel-card">
+      <div class="channel-icon">🌐</div>
+      <div class="channel-name">Web Chat</div>
+    </div>
+    <div class="channel-card">
+      <div class="channel-icon">📋</div>
+      <div class="channel-name">Formulario</div>
+    </div>
+    <div class="channel-card">
+      <div class="channel-icon">📧</div>
+      <div class="channel-name">Email</div>
+    </div>
+    <div class="channel-card">
+      <div class="channel-icon">📞</div>
+      <div class="channel-name">Llamada</div>
+    </div>
+  </div>
+</div>
+
+<!-- STATS -->
+<div class="stats-section">
+  <div class="section-num">06 — RESULTADOS</div>
+  <h2 class="section-title">Los números hablan</h2>
+
+  <div class="stats-grid" id="statsGrid">
+    <div class="stat-item">
+      <span class="stat-num count-up" data-target="21">0</span>x
+      <div class="stat-label">Más conversiones respondiendo en 5 min</div>
+    </div>
+    <div class="stat-item">
+      <span class="stat-num">24/7</span>
+      <div class="stat-label">Disponibilidad sin descanso</div>
+    </div>
+    <div class="stat-item">
+      <span class="stat-num count-up" data-target="3">0</span>min
+      <div class="stat-label">Para configurar una agencia nueva</div>
+    </div>
+    <div class="stat-item">
+      <span class="stat-num">+1400</span>%
+      <div class="stat-label">ROI estimado en el primer mes</div>
+    </div>
+  </div>
+</div>
+
+<!-- CTA -->
+<div class="cta-section">
+  <div class="cta-bg"></div>
+  <h2 class="cta-title">
+    Empieza<br>hoy
+  </h2>
+  <p class="cta-sub">
+    Tu próximo cliente puede escribir ahora mismo. Con Aria, nunca más lo perderás.
+  </p>
+  <a href="#" class="cta-btn">
+    Activar Aria IA
+    <div class="cta-btn-arrow"></div>
+  </a>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <span>© 2026 ARIA IA</span>
+  <span>Automatización Inmobiliaria · Powered by AI</span>
+</footer>
+
+<script>
+// CURSOR
+const cursor = document.getElementById('cursor');
+const follower = document.getElementById('cursorFollower');
+let mouseX = 0, mouseY = 0;
+let followerX = 0, followerY = 0;
+
+document.addEventListener('mousemove', e => {
+  mouseX = e.clientX;
+  mouseY = e.clientY;
+  cursor.style.left = mouseX - 4 + 'px';
+  cursor.style.top = mouseY - 4 + 'px';
+});
+
+function animateFollower() {
+  followerX += (mouseX - followerX - 16) * 0.12;
+  followerY += (mouseY - followerY - 16) * 0.12;
+  follower.style.left = followerX + 'px';
+  follower.style.top = followerY + 'px';
+  requestAnimationFrame(animateFollower);
+}
+animateFollower();
+
+// SCROLL ANIMATIONS
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach((entry, i) => {
+    if (entry.isIntersecting) {
+      setTimeout(() => {
+        entry.target.classList.add('visible');
+      }, entry.target.dataset.delay || 0);
+    }
+  });
+}, { threshold: 0.1 });
+
+// Flow steps
+document.querySelectorAll('.flow-step').forEach((el, i) => {
+  el.dataset.delay = i * 100;
+  observer.observe(el);
+});
+
+// Features
+document.querySelectorAll('.feature-item').forEach((el, i) => {
+  el.dataset.delay = i * 80;
+  observer.observe(el);
+});
+
+// Channels
+document.querySelectorAll('.channel-card').forEach((el, i) => {
+  el.dataset.delay = i * 100;
+  observer.observe(el);
+});
+
+// Stats
+document.querySelectorAll('.stat-item').forEach((el, i) => {
+  el.dataset.delay = i * 100;
+  observer.observe(el);
+});
+
+// Process
+document.querySelectorAll('.process-item').forEach((el, i) => {
+  el.dataset.delay = i * 120;
+  observer.observe(el);
+});
+
+// COUNT UP ANIMATION
+const countObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const el = entry.target;
+      const target = parseInt(el.dataset.target);
+      let current = 0;
+      const step = target / 30;
+      const timer = setInterval(() => {
+        current += step;
+        if (current >= target) {
+          current = target;
+          clearInterval(timer);
+        }
+        el.textContent = Math.floor(current);
+      }, 50);
+      countObserver.unobserve(el);
+    }
+  });
+}, { threshold: 0.5 });
+
+document.querySelectorAll('.count-up').forEach(el => countObserver.observe(el));
+
+// WHATSAPP ANIMATION
+const messages = [
+  { type: 'aria', text: '¡Hola! Soy Aria de Inmobiliaria Demo. ¿Con quién hablo?', delay: 800 },
+  { type: 'user', text: 'Hola, me llamo Juan', delay: 2000 },
+  { type: 'aria', text: '¡Hola Juan! ¿Buscas comprar o alquilar?', delay: 3200 },
+  { type: 'user', text: 'Alquilar, en Chamberí si puede ser', delay: 4600 },
+  { type: 'aria', text: '¿Cuál es tu presupuesto máximo al mes?', delay: 5800 },
+  { type: 'user', text: 'Unos 1.200€', delay: 7000 },
+  { type: 'aria', text: 'Perfecto. ¿Para cuándo necesitas el piso?', delay: 8200 },
+  { type: 'user', text: 'Para el mes que viene', delay: 9400 },
+  { type: 'aria', text: '✅ He agendado una llamada para mañana a las 10:00. Recibirás confirmación por email.', delay: 11000 },
+];
+
+const waMessages = document.getElementById('waMessages');
+const typing1 = document.getElementById('typing1');
+
+const demoObserver = new IntersectionObserver((entries) => {
+  if (entries[0].isIntersecting) {
+    typing1.classList.add('visible');
+    
+    messages.forEach((msg, i) => {
+      setTimeout(() => {
+        // Remove typing
+        typing1.classList.remove('visible');
+        
+        const msgEl = document.createElement('div');
+        msgEl.className = `msg msg-${msg.type}`;
+        msgEl.innerHTML = `${msg.text}<div class="msg-time">${new Date().getHours()}:${String(new Date().getMinutes()).padStart(2,'0')}</div>`;
+        waMessages.appendChild(msgEl);
+        
+        setTimeout(() => msgEl.classList.add('visible'), 50);
+        
+        // Show typing for next
+        if (i < messages.length - 1 && messages[i+1].type === 'aria') {
+          setTimeout(() => {
+            typing1.classList.add('visible');
+            waMessages.appendChild(typing1);
+          }, 400);
+        }
+
+        // Show telegram notification when done
+        if (i === messages.length - 1) {
+          setTimeout(() => {
+            document.getElementById('tgNotif').classList.add('show');
+            setTimeout(() => document.getElementById('tgNotif').classList.remove('show'), 5000);
+          }, 1500);
+        }
+      }, msg.delay);
+    });
+    
+    demoObserver.unobserve(entries[0].target);
+  }
+}, { threshold: 0.3 });
+
+demoObserver.observe(document.querySelector('.demo-section'));
+</script>
+</body>
+</html>

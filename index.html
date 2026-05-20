@@ -751,7 +751,88 @@ footer {
 
 .process-desc { font-size: 14px; color: var(--gray); line-height: 1.7; max-width: 600px; }
 
-/* RESPONSIVE */
+/* MARQUEE */
+.marquee {
+  overflow: hidden;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  padding: 20px 0;
+  background: var(--black);
+  position: relative;
+  z-index: 1;
+}
+
+.marquee-track {
+  display: flex;
+  gap: 60px;
+  white-space: nowrap;
+  width: max-content;
+}
+
+.marquee-item {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 13px;
+  letter-spacing: 4px;
+  color: var(--gray);
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.marquee-dot {
+  width: 4px; height: 4px;
+  background: var(--white);
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* EXTRA SCROLL REVEAL */
+.reveal-left {
+  opacity: 0;
+  transform: translateX(-30px);
+  transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.reveal-right {
+  opacity: 0;
+  transform: translateX(30px);
+  transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.reveal-scale {
+  opacity: 0;
+  transform: scale(0.94);
+  transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.reveal-left.visible,
+.reveal-right.visible,
+.reveal-scale.visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* Z-INDEX FIX */
+.hero, section, .flow-container, .demo-section,
+.process-section, .features-section, .channels-section,
+.stats-section, .cta-section, footer {
+  position: relative;
+  z-index: 1;
+}
+
+/* GLOWING LINE */
+.glow-line {
+  width: 1px;
+  height: 80px;
+  background: linear-gradient(to bottom, transparent, var(--white), transparent);
+  margin: 0 auto;
+  animation: glowPulse 2s ease-in-out infinite;
+}
+
+@keyframes glowPulse {
+  0%, 100% { opacity: 0.3; transform: scaleY(0.8); }
+  50% { opacity: 1; transform: scaleY(1); }
+}
 @media (max-width: 768px) {
   .demo-grid { grid-template-columns: 1fr; }
   .features-grid { grid-template-columns: 1fr; }
@@ -763,6 +844,8 @@ footer {
 </style>
 </head>
 <body>
+
+<canvas id="bgCanvas" style="position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;opacity:0.35;"></canvas>
 
 <div class="cursor" id="cursor"></div>
 <div class="cursor-follower" id="cursorFollower"></div>
@@ -790,6 +873,28 @@ footer {
   <div class="hero-scroll">
     <div class="scroll-line"></div>
     Scroll
+  </div>
+</div>
+
+<!-- MARQUEE -->
+<div class="marquee">
+  <div class="marquee-track">
+    <div class="marquee-item"><div class="marquee-dot"></div>WhatsApp 24/7</div>
+    <div class="marquee-item"><div class="marquee-dot"></div>Cualificación Automática</div>
+    <div class="marquee-item"><div class="marquee-dot"></div>Google Calendar</div>
+    <div class="marquee-item"><div class="marquee-dot"></div>Alertas Telegram</div>
+    <div class="marquee-item"><div class="marquee-dot"></div>IA Conversacional</div>
+    <div class="marquee-item"><div class="marquee-dot"></div>Sin Código</div>
+    <div class="marquee-item"><div class="marquee-dot"></div>ROI +1400%</div>
+    <div class="marquee-item"><div class="marquee-dot"></div>Setup 3 Minutos</div>
+    <div class="marquee-item"><div class="marquee-dot"></div>WhatsApp 24/7</div>
+    <div class="marquee-item"><div class="marquee-dot"></div>Cualificación Automática</div>
+    <div class="marquee-item"><div class="marquee-dot"></div>Google Calendar</div>
+    <div class="marquee-item"><div class="marquee-dot"></div>Alertas Telegram</div>
+    <div class="marquee-item"><div class="marquee-dot"></div>IA Conversacional</div>
+    <div class="marquee-item"><div class="marquee-dot"></div>Sin Código</div>
+    <div class="marquee-item"><div class="marquee-dot"></div>ROI +1400%</div>
+    <div class="marquee-item"><div class="marquee-dot"></div>Setup 3 Minutos</div>
   </div>
 </div>
 
@@ -1037,6 +1142,74 @@ footer {
   </div>
 </div>
 
+<!-- PRICING -->
+<div class="stats-section" style="border-top: 1px solid var(--line);">
+  <div class="section-num">07 — INVERSIÓN</div>
+  <h2 class="section-title">Precios claros,<br>sin sorpresas</h2>
+  <p style="font-size:14px; color:var(--gray); max-width:500px; line-height:1.8; margin-bottom:60px;">
+    Un solo cliente adicional al mes cubre con creces la inversión. Sin permanencia, sin letra pequeña.
+  </p>
+
+  <div style="display:grid; grid-template-columns:1fr 1fr; gap:1px; background:var(--line); border:1px solid var(--line); margin-bottom:40px;">
+    
+    <div style="background:var(--black); padding:48px 40px;">
+      <div style="font-size:10px; letter-spacing:3px; color:var(--gray); margin-bottom:16px; text-transform:uppercase;">Puesta en marcha</div>
+      <div style="font-family:'Bebas Neue',sans-serif; font-size:72px; line-height:1; letter-spacing:-2px; margin-bottom:4px;">497€</div>
+      <div style="font-size:12px; color:var(--gray); margin-bottom:32px;">Pago único · Sin permanencia</div>
+      <div style="display:flex; flex-direction:column; gap:12px;">
+        <div style="display:flex; gap:12px; font-size:13px; color:var(--gray); align-items:center;">
+          <span style="color:var(--white);">→</span> Instalación y configuración completa
+        </div>
+        <div style="display:flex; gap:12px; font-size:13px; color:var(--gray); align-items:center;">
+          <span style="color:var(--white);">→</span> Integración Google Calendar y Sheets
+        </div>
+        <div style="display:flex; gap:12px; font-size:13px; color:var(--gray); align-items:center;">
+          <span style="color:var(--white);">→</span> WhatsApp y chat en web activos
+        </div>
+        <div style="display:flex; gap:12px; font-size:13px; color:var(--gray); align-items:center;">
+          <span style="color:var(--white);">→</span> Formación de 1 hora incluida
+        </div>
+      </div>
+    </div>
+
+    <div style="background:var(--white); padding:48px 40px;">
+      <div style="font-size:10px; letter-spacing:3px; color:#666; margin-bottom:16px; text-transform:uppercase;">Mantenimiento mensual</div>
+      <div style="font-family:'Bebas Neue',sans-serif; font-size:72px; line-height:1; letter-spacing:-2px; color:var(--black); margin-bottom:4px;">97€</div>
+      <div style="font-size:12px; color:#666; margin-bottom:32px;">Al mes · Cancela cuando quieras</div>
+      <div style="display:flex; flex-direction:column; gap:12px;">
+        <div style="display:flex; gap:12px; font-size:13px; color:#444; align-items:center;">
+          <span style="color:var(--black); font-weight:700;">→</span> Aria siempre actualizada
+        </div>
+        <div style="display:flex; gap:12px; font-size:13px; color:#444; align-items:center;">
+          <span style="color:var(--black); font-weight:700;">→</span> Soporte directo por WhatsApp
+        </div>
+        <div style="display:flex; gap:12px; font-size:13px; color:#444; align-items:center;">
+          <span style="color:var(--black); font-weight:700;">→</span> Mejoras y nuevas funciones
+        </div>
+        <div style="display:flex; gap:12px; font-size:13px; color:#444; align-items:center;">
+          <span style="color:var(--black); font-weight:700;">→</span> Sin permanencia ni contratos
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div style="background:rgba(245,242,237,0.04); border:1px solid var(--line); padding:32px 40px; display:grid; grid-template-columns:repeat(3,1fr); gap:32px;">
+    <div>
+      <div style="font-size:11px; color:var(--gray); letter-spacing:2px; margin-bottom:8px;">COSTE MENSUAL</div>
+      <div style="font-family:'Bebas Neue',sans-serif; font-size:32px;">97€</div>
+    </div>
+    <div>
+      <div style="font-size:11px; color:var(--gray); letter-spacing:2px; margin-bottom:8px;">COMISIÓN MEDIA</div>
+      <div style="font-family:'Bebas Neue',sans-serif; font-size:32px;">3.000€</div>
+    </div>
+    <div>
+      <div style="font-size:11px; color:var(--gray); letter-spacing:2px; margin-bottom:8px;">1 CLIENTE EXTRA = </div>
+      <div style="font-family:'Bebas Neue',sans-serif; font-size:32px;">30x retorno</div>
+    </div>
+  </div>
+</div>
+
 <!-- CTA -->
 <div class="cta-section">
   <div class="cta-bg"></div>
@@ -1046,8 +1219,8 @@ footer {
   <p class="cta-sub">
     Tu próximo cliente puede escribir ahora mismo. Con Aria, nunca más lo perderás.
   </p>
-  <a href="#" class="cta-btn">
-    Activar Aria IA
+  <a href="aria-onboarding.html" target="_blank" class="cta-btn">
+    Comenzar con Aria
     <div class="cta-btn-arrow"></div>
   </a>
 </div>
@@ -1059,6 +1232,89 @@ footer {
 </footer>
 
 <script>
+// ANIMATED BACKGROUND CANVAS
+const canvas = document.getElementById('bgCanvas');
+const ctx = canvas.getContext('2d');
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+window.addEventListener('resize', () => {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+});
+
+const particles = Array.from({ length: 80 }, () => ({
+  x: Math.random() * canvas.width,
+  y: Math.random() * canvas.height,
+  vx: (Math.random() - 0.5) * 0.3,
+  vy: (Math.random() - 0.5) * 0.3,
+  size: Math.random() * 1.5 + 0.3,
+  opacity: Math.random() * 0.5 + 0.1,
+}));
+
+function drawBg() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  
+  particles.forEach(p => {
+    p.x += p.vx;
+    p.y += p.vy;
+    if (p.x < 0) p.x = canvas.width;
+    if (p.x > canvas.width) p.x = 0;
+    if (p.y < 0) p.y = canvas.height;
+    if (p.y > canvas.height) p.y = 0;
+    
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(245,242,237,${p.opacity})`;
+    ctx.fill();
+  });
+
+  // Draw connections
+  particles.forEach((p, i) => {
+    particles.slice(i + 1).forEach(p2 => {
+      const dx = p.x - p2.x;
+      const dy = p.y - p2.y;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      if (dist < 120) {
+        ctx.beginPath();
+        ctx.moveTo(p.x, p.y);
+        ctx.lineTo(p2.x, p2.y);
+        ctx.strokeStyle = `rgba(245,242,237,${0.06 * (1 - dist / 120)})`;
+        ctx.lineWidth = 0.5;
+        ctx.stroke();
+      }
+    });
+  });
+
+  requestAnimationFrame(drawBg);
+}
+drawBg();
+
+// PARALLAX ON SCROLL
+window.addEventListener('scroll', () => {
+  const scrollY = window.scrollY;
+  const heroGrid = document.querySelector('.hero-grid');
+  if (heroGrid) heroGrid.style.transform = `translateY(${scrollY * 0.3}px)`;
+  
+  // Fade canvas on scroll
+  const maxScroll = 600;
+  const opacity = Math.max(0.1, 0.35 - (scrollY / maxScroll) * 0.2);
+  canvas.style.opacity = opacity;
+});
+
+// HORIZONTAL SCROLL TEXT
+const marqueeText = document.querySelector('.marquee-track');
+if (marqueeText) {
+  let pos = 0;
+  function animateMarquee() {
+    pos -= 0.5;
+    if (pos < -marqueeText.scrollWidth / 2) pos = 0;
+    marqueeText.style.transform = `translateX(${pos}px)`;
+    requestAnimationFrame(animateMarquee);
+  }
+  animateMarquee();
+}
+
 // CURSOR
 const cursor = document.getElementById('cursor');
 const follower = document.getElementById('cursorFollower');
@@ -1198,6 +1454,37 @@ const demoObserver = new IntersectionObserver((entries) => {
     demoObserver.unobserve(entries[0].target);
   }
 }, { threshold: 0.3 });
+
+// EXTRA REVEAL CLASSES
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      setTimeout(() => entry.target.classList.add('visible'), entry.target.dataset.delay || 0);
+    }
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.reveal-left, .reveal-right, .reveal-scale').forEach((el, i) => {
+  el.dataset.delay = i * 80;
+  revealObserver.observe(el);
+});
+
+// Add reveal classes dynamically to section titles
+document.querySelectorAll('.section-title').forEach((el, i) => {
+  el.classList.add('reveal-left');
+  revealObserver.observe(el);
+});
+
+document.querySelectorAll('.section-body').forEach((el, i) => {
+  el.classList.add('reveal-left');
+  el.dataset.delay = 100;
+  revealObserver.observe(el);
+});
+
+document.querySelectorAll('.flow-title').forEach(el => {
+  el.classList.add('reveal-scale');
+  revealObserver.observe(el);
+});
 
 demoObserver.observe(document.querySelector('.demo-section'));
 </script>

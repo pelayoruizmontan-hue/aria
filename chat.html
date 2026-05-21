@@ -37,7 +37,6 @@ body {
   mix-blend-mode: difference;
 }
 
-/* CANVAS BG */
 #bgCanvas {
   position: fixed;
   inset: 0;
@@ -45,7 +44,6 @@ body {
   pointer-events: none;
 }
 
-/* HEADER */
 .header {
   position: relative;
   z-index: 2;
@@ -68,7 +66,6 @@ body {
   justify-content: center;
   font-size: 18px;
   flex-shrink: 0;
-  box-shadow: 0 0 20px rgba(245,242,237,0.1);
 }
 
 .header-name {
@@ -93,8 +90,8 @@ body {
 }
 
 @keyframes statusPulse {
-  0%, 100% { opacity: 1; box-shadow: 0 0 4px #25D366; }
-  50% { opacity: 0.5; box-shadow: none; }
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
 }
 
 .header-powered {
@@ -104,7 +101,6 @@ body {
   letter-spacing: 2px;
 }
 
-/* MESSAGES */
 .messages {
   position: relative;
   z-index: 2;
@@ -166,7 +162,6 @@ body {
 
 .msg-user .msg-time { text-align: right; }
 
-/* TYPING */
 .typing {
   align-self: flex-start;
   display: none;
@@ -202,7 +197,6 @@ body {
   30% { transform: translateY(-6px); opacity: 1; }
 }
 
-/* INPUT */
 .input-area {
   position: relative;
   z-index: 2;
@@ -230,15 +224,12 @@ body {
   resize: none;
   min-height: 48px;
   max-height: 120px;
-  transition: border-color 0.3s ease, background 0.3s ease;
+  transition: border-color 0.3s ease;
   cursor: none;
 }
 
 .input-box::placeholder { color: rgba(245,242,237,0.2); }
-.input-box:focus {
-  border-color: rgba(245,242,237,0.2);
-  background: rgba(245,242,237,0.06);
-}
+.input-box:focus { border-color: rgba(245,242,237,0.2); }
 
 .send-btn {
   width: 48px; height: 48px;
@@ -261,14 +252,6 @@ body {
   border-right: 2px solid var(--black);
   border-top: 2px solid var(--black);
   transform: rotate(45deg) translate(-2px, 2px);
-}
-
-/* ERROR MSG */
-.error-msg {
-  font-size: 12px;
-  color: #ff6b6b;
-  text-align: center;
-  padding: 8px;
 }
 </style>
 </head>
@@ -319,9 +302,12 @@ const canvas = document.getElementById('bgCanvas');
 const ctx = canvas.getContext('2d');
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
-window.addEventListener('resize', () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; });
+window.addEventListener('resize', () => {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+});
 
-let time = 0;
+let gridTime = 0;
 function drawGrid() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   const spacing = 60;
@@ -330,51 +316,44 @@ function drawGrid() {
 
   for (let i = 0; i < cols; i++) {
     for (let j = 0; j < rows; j++) {
-      const x = i * spacing;
-      const y = j * spacing;
-      const wave = Math.sin(time * 0.5 + i * 0.3 + j * 0.3) * 0.5 + 0.5;
+      const wave = Math.sin(gridTime * 0.5 + i * 0.3 + j * 0.3) * 0.5 + 0.5;
       const opacity = wave * 0.06 + 0.02;
       ctx.beginPath();
-      ctx.arc(x, y, 1.5, 0, Math.PI * 2);
+      ctx.arc(i * spacing, j * spacing, 1.5, 0, Math.PI * 2);
       ctx.fillStyle = `rgba(245,242,237,${opacity})`;
       ctx.fill();
     }
   }
 
-  // Líneas horizontales animadas
   for (let j = 0; j < rows; j++) {
-    const y = j * spacing;
-    const wave = Math.sin(time * 0.3 + j * 0.4) * 0.5 + 0.5;
+    const wave = Math.sin(gridTime * 0.3 + j * 0.4) * 0.5 + 0.5;
     ctx.beginPath();
-    ctx.moveTo(0, y);
-    ctx.lineTo(canvas.width, y);
+    ctx.moveTo(0, j * spacing);
+    ctx.lineTo(canvas.width, j * spacing);
     ctx.strokeStyle = `rgba(245,242,237,${wave * 0.03})`;
     ctx.lineWidth = 0.5;
     ctx.stroke();
   }
 
-  // Líneas verticales animadas
   for (let i = 0; i < cols; i++) {
-    const x = i * spacing;
-    const wave = Math.sin(time * 0.3 + i * 0.4) * 0.5 + 0.5;
+    const wave = Math.sin(gridTime * 0.3 + i * 0.4) * 0.5 + 0.5;
     ctx.beginPath();
-    ctx.moveTo(x, 0);
-    ctx.lineTo(x, canvas.height);
+    ctx.moveTo(i * spacing, 0);
+    ctx.lineTo(i * spacing, canvas.height);
     ctx.strokeStyle = `rgba(245,242,237,${wave * 0.03})`;
     ctx.lineWidth = 0.5;
     ctx.stroke();
   }
 
-  time += 0.02;
+  gridTime += 0.02;
   requestAnimationFrame(drawGrid);
 }
 drawGrid();
 
-// AGENCIA ID DE LA URL
+// CONFIG
 const urlParams = new URLSearchParams(window.location.search);
 const agenciaId = urlParams.get('agencia') || 'default';
 const sessionId = agenciaId + '-' + Math.random().toString(36).substr(2, 9);
-
 const WEBHOOK_URL = 'https://sergioalldream.app.n8n.cloud/webhook/chat-aria';
 
 // BIENVENIDA
@@ -382,16 +361,16 @@ window.addEventListener('load', async () => {
   showTyping();
   await delay(1500);
   hideTyping();
-  addMessage('aria', '¡Hola! Soy Aria, tu asistente virtual inmobiliaria. Estoy aquí para ayudarte a encontrar la propiedad perfecta. ¿En qué puedo ayudarte hoy?');
+  addMessage('aria', '¡Hola! Soy Aria, tu asistente virtual. Estoy aquí para ayudarte a encontrar la propiedad perfecta. ¿En qué puedo ayudarte hoy?');
 });
 
 // ENVIAR MENSAJE
 async function sendMessage() {
   const input = document.getElementById('inputBox');
-  const text = input.value.trim();
-  if (!text) return;
+  const userText = input.value.trim();
+  if (!userText) return;
 
-  addMessage('user', text);
+  addMessage('user', userText);
   input.value = '';
   input.style.height = 'auto';
   showTyping();
@@ -403,27 +382,29 @@ async function sendMessage() {
       body: JSON.stringify({
         action: 'sendMessage',
         sessionId: sessionId,
-        chatInput: text,
+        chatInput: userText,
         agenciaId: agenciaId
       })
     });
 
-    const text = await response.text();
-    console.log('Respuesta raw:', text);
-    let data = {};
-try { data = JSON.parse(text); } catch(e) { 
-  console.log('No es JSON, usando texto directo:', text);
-  data = { output: text }; 
-}    hideTyping();
+    const rawResponse = await response.text();
+    console.log('Respuesta raw de n8n:', rawResponse);
 
-    const reply = data.output || data.text || data.message || data.response || '';
+    let reply = '';
+    try {
+      const parsed = JSON.parse(rawResponse);
+      reply = parsed.output || parsed.text || parsed.message || parsed.response || rawResponse;
+    } catch(e) {
+      reply = rawResponse;
+    }
 
-    if (!reply) {
+    hideTyping();
+
+    if (!reply || reply.trim() === '') {
       addMessage('aria', 'Lo siento, ha habido un problema. Por favor intenta de nuevo.');
       return;
     }
 
-    // Limpiar JSON y markdown del output
     const cleanReply = reply
       .replace(/```json[\s\S]*?```/g, '')
       .replace(/\*\*(.*?)\*\*/g, '$1')
@@ -433,36 +414,31 @@ try { data = JSON.parse(text); } catch(e) {
     addMessage('aria', cleanReply);
 
   } catch(err) {
-    console.error('Error:', err);
+    console.error('Error fetch:', err);
     hideTyping();
     addMessage('aria', 'Lo siento, ha habido un problema de conexión. Por favor intenta de nuevo.');
   }
 }
 
-function addMessage(type, text) {
+function addMessage(type, msgText) {
   const messages = document.getElementById('messages');
   const typing = document.getElementById('typing');
-
   const msg = document.createElement('div');
   msg.className = `msg msg-${type}`;
-
   const now = new Date();
-  const time = `${now.getHours()}:${String(now.getMinutes()).padStart(2, '0')}`;
-
+  const timeStr = `${now.getHours()}:${String(now.getMinutes()).padStart(2, '0')}`;
   msg.innerHTML = `
-    <div class="msg-bubble">${text.replace(/\n/g, '<br>')}</div>
-    <div class="msg-time">${time}</div>
+    <div class="msg-bubble">${msgText.replace(/\n/g, '<br>')}</div>
+    <div class="msg-time">${timeStr}</div>
   `;
-
   messages.insertBefore(msg, typing);
   messages.scrollTop = messages.scrollHeight;
 }
 
 function showTyping() {
   const typing = document.getElementById('typing');
-  const messages = document.getElementById('messages');
   typing.classList.add('show');
-  messages.scrollTop = messages.scrollHeight;
+  document.getElementById('messages').scrollTop = 99999;
 }
 
 function hideTyping() {

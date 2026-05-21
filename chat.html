@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aria IA — Asistente Virtual</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap');
+
+:root {
+  --black: #080808;
+  --white: #F5F2ED;
+  --gray: #666;
+  --line: rgba(245,242,237,0.1);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--black);
+  color: var(--white);
+  font-family: 'DM Sans', sans-serif;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  cursor: none;
+}
+
+.cursor {
+  width: 8px; height: 8px;
+  background: var(--white);
+  border-radius: 50%;
+  position: fixed;
+  pointer-events: none;
+  z-index: 9999;
+  mix-blend-mode: difference;
+}
+
+.header {
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-shrink: 0;
+  background: rgba(8,8,8,0.98);
+}
+
+.header-avatar {
+  width: 40px; height: 40px;
+  background: var(--white);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+}
+
+.header-name {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 16px;
+  letter-spacing: 2px;
+}
+
+.header-status {
+  font-size: 11px;
+  color: #25D366;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.status-dot {
+  width: 6px; height: 6px;
+  background: #25D366;
+  border-radius: 50%;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+.header-powered {
+  margin-left: auto;
+  font-size: 9px;
+  color: rgba(245,242,237,0.2);
+  letter-spacing: 2px;
+}
+
+.messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 24px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  scroll-behavior: smooth;
+}
+
+.messages::-webkit-scrollbar { width: 4px; }
+.messages::-webkit-scrollbar-thumb { background: rgba(245,242,237,0.1); border-radius: 2px; }
+
+.msg {
+  max-width: 80%;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  animation: msgIn 0.3s ease;
+}
+
+@keyframes msgIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.msg-aria { align-self: flex-start; }
+.msg-user { align-self: flex-end; }
+
+.msg-bubble {
+  padding: 12px 16px;
+  border-radius: 16px;
+  font-size: 14px;
+  line-height: 1.6;
+  font-weight: 300;
+}
+
+.msg-aria .msg-bubble {
+  background: #1a1a1a;
+  border: 1px solid var(--line);
+  border-bottom-left-radius: 4px;
+}
+
+.msg-user .msg-bubble {
+  background: #2a2a2a;
+  border: 1px solid rgba(245,242,237,0.08);
+  border-bottom-right-radius: 4px;
+}
+
+.msg-time {
+  font-size: 10px;
+  color: var(--gray);
+  padding: 0 4px;
+}
+
+.msg-user .msg-time { text-align: right; }
+
+.typing {
+  align-self: flex-start;
+  display: none;
+}
+
+.typing.show { display: flex; }
+
+.typing-bubble {
+  background: #1a1a1a;
+  border: 1px solid var(--line);
+  border-bottom-left-radius: 4px;
+  padding: 14px 18px;
+  border-radius: 16px;
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.typing-dot {
+  width: 6px; height: 6px;
+  background: var(--gray);
+  border-radius: 50%;
+  animation: typingBounce 1.2s ease-in-out infinite;
+}
+
+.typing-dot:nth-child(2) { animation-delay: 0.2s; }
+.typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes typingBounce {
+  0%, 60%, 100% { transform: translateY(0); }
+  30% { transform: translateY(-5px); }
+}
+
+.input-area {
+  padding: 16px;
+  border-top: 1px solid var(--line);
+  display: flex;
+  gap: 12px;
+  align-items: flex-end;
+  flex-shrink: 0;
+  background: rgba(8,8,8,0.98);
+}
+
+.input-box {
+  flex: 1;
+  background: rgba(245,242,237,0.05);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 12px 16px;
+  color: var(--white);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 300;
+  outline: none;
+  resize: none;
+  min-height: 48px;
+  max-height: 120px;
+  transition: border-color 0.3s ease;
+  cursor: none;
+}
+
+.input-box::placeholder { color: rgba(245,242,237,0.2); }
+.input-box:focus { border-color: rgba(245,242,237,0.3); }
+
+.send-btn {
+  width: 48px; height: 48px;
+  background: var(--white);
+  border: none;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: none;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.send-btn:hover { background: #ddd; }
+
+.send-icon {
+  width: 20px; height: 20px;
+  border-right: 2px solid var(--black);
+  border-top: 2px solid var(--black);
+  transform: rotate(45deg) translate(-2px, 2px);
+}
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+
+<div class="header">
+  <div class="header-avatar">🏠</div>
+  <div>
+    <div class="header-name" id="headerName">Aria IA</div>
+    <div class="header-status">
+      <div class="status-dot"></div>
+      En línea
+    </div>
+  </div>
+  <div class="header-powered">ARIA IA</div>
+</div>
+
+<div class="messages" id="messages">
+  <div class="typing" id="typing">
+    <div class="typing-bubble">
+      <div class="typing-dot"></div>
+      <div class="typing-dot"></div>
+      <div class="typing-dot"></div>
+    </div>
+  </div>
+</div>
+
+<div class="input-area">
+  <textarea class="input-box" id="inputBox" placeholder="Escribe tu mensaje..." rows="1"></textarea>
+  <button class="send-btn" id="sendBtn">
+    <div class="send-icon"></div>
+  </button>
+</div>
+
+<script>
+// CURSOR
+const cursor = document.getElementById('cursor');
+document.addEventListener('mousemove', e => {
+  cursor.style.left = e.clientX - 4 + 'px';
+  cursor.style.top = e.clientY - 4 + 'px';
+});
+
+// OBTENER agencia_id DE LA URL
+const urlParams = new URLSearchParams(window.location.search);
+const agenciaId = urlParams.get('agencia') || 'default';
+
+// SESSION ID único por conversación + agencia
+const sessionId = agenciaId + '-' + Math.random().toString(36).substr(2, 9);
+
+// WEBHOOK DE N8N
+const WEBHOOK_URL = 'https://sergioalldream.app.n8n.cloud/webhook/chat-aria';
+
+// MOSTRAR BIENVENIDA
+window.addEventListener('load', async () => {
+  showTyping();
+  await delay(1500);
+  hideTyping();
+  addMessage('aria', '¡Hola! Soy Aria, tu asistente virtual inmobiliaria. Estoy aquí para ayudarte a encontrar la propiedad perfecta. ¿En qué puedo ayudarte hoy?');
+});
+
+// ENVIAR MENSAJE
+async function sendMessage() {
+  const input = document.getElementById('inputBox');
+  const text = input.value.trim();
+  if (!text) return;
+
+  addMessage('user', text);
+  input.value = '';
+  input.style.height = 'auto';
+
+  showTyping();
+
+  try {
+    const response = await fetch(WEBHOOK_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        action: 'sendMessage',
+        sessionId: sessionId,
+        chatInput: text,
+        agenciaId: agenciaId
+      })
+    });
+
+    const data = await response.json();
+    hideTyping();
+
+    const reply = data.output || data.text || data.message || 'Lo siento, ha habido un error. Por favor intenta de nuevo.';
+    
+    // Limpiar JSON del output si aparece
+    const cleanReply = reply.replace(/```json[\s\S]*?```/g, '').trim();
+    
+    addMessage('aria', cleanReply);
+
+  } catch(err) {
+    hideTyping();
+    addMessage('aria', 'Lo siento, ha habido un problema de conexión. Por favor intenta de nuevo.');
+  }
+}
+
+// AÑADIR MENSAJE AL CHAT
+function addMessage(type, text) {
+  const messages = document.getElementById('messages');
+  const typing = document.getElementById('typing');
+  
+  const msg = document.createElement('div');
+  msg.className = `msg msg-${type}`;
+  
+  const now = new Date();
+  const time = `${now.getHours()}:${String(now.getMinutes()).padStart(2, '0')}`;
+  
+  msg.innerHTML = `
+    <div class="msg-bubble">${text.replace(/\n/g, '<br>')}</div>
+    <div class="msg-time">${time}</div>
+  `;
+  
+  messages.insertBefore(msg, typing);
+  messages.scrollTop = messages.scrollHeight;
+}
+
+function showTyping() {
+  const typing = document.getElementById('typing');
+  const messages = document.getElementById('messages');
+  typing.classList.add('show');
+  messages.scrollTop = messages.scrollHeight;
+}
+
+function hideTyping() {
+  document.getElementById('typing').classList.remove('show');
+}
+
+function delay(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+// EVENTOS
+document.getElementById('sendBtn').addEventListener('click', sendMessage);
+
+document.getElementById('inputBox').addEventListener('keydown', e => {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    sendMessage();
+  }
+});
+
+document.getElementById('inputBox').addEventListener('input', function() {
+  this.style.height = 'auto';
+  this.style.height = Math.min(this.scrollHeight, 120) + 'px';
+});
+</script>
+</body>
+</html>

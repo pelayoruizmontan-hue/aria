@@ -37,14 +37,26 @@ body {
   mix-blend-mode: difference;
 }
 
+/* CANVAS BG */
+#bgCanvas {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* HEADER */
 .header {
-  padding: 20px 24px;
+  position: relative;
+  z-index: 2;
+  padding: 18px 24px;
   border-bottom: 1px solid var(--line);
   display: flex;
   align-items: center;
   gap: 14px;
   flex-shrink: 0;
-  background: rgba(8,8,8,0.98);
+  background: rgba(8,8,8,0.85);
+  backdrop-filter: blur(20px);
 }
 
 .header-avatar {
@@ -55,6 +67,8 @@ body {
   align-items: center;
   justify-content: center;
   font-size: 18px;
+  flex-shrink: 0;
+  box-shadow: 0 0 20px rgba(245,242,237,0.1);
 }
 
 .header-name {
@@ -75,12 +89,12 @@ body {
   width: 6px; height: 6px;
   background: #25D366;
   border-radius: 50%;
-  animation: pulse 2s ease-in-out infinite;
+  animation: statusPulse 2s ease-in-out infinite;
 }
 
-@keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.4; }
+@keyframes statusPulse {
+  0%, 100% { opacity: 1; box-shadow: 0 0 4px #25D366; }
+  50% { opacity: 0.5; box-shadow: none; }
 }
 
 .header-powered {
@@ -90,7 +104,10 @@ body {
   letter-spacing: 2px;
 }
 
+/* MESSAGES */
 .messages {
+  position: relative;
+  z-index: 2;
   flex: 1;
   overflow-y: auto;
   padding: 24px 16px;
@@ -108,12 +125,12 @@ body {
   display: flex;
   flex-direction: column;
   gap: 4px;
-  animation: msgIn 0.3s ease;
+  animation: msgIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 @keyframes msgIn {
-  from { opacity: 0; transform: translateY(8px); }
-  to { opacity: 1; transform: translateY(0); }
+  from { opacity: 0; transform: translateY(12px) scale(0.96); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
 }
 
 .msg-aria { align-self: flex-start; }
@@ -123,20 +140,22 @@ body {
   padding: 12px 16px;
   border-radius: 16px;
   font-size: 14px;
-  line-height: 1.6;
+  line-height: 1.65;
   font-weight: 300;
 }
 
 .msg-aria .msg-bubble {
-  background: #1a1a1a;
-  border: 1px solid var(--line);
+  background: rgba(26,26,26,0.9);
+  border: 1px solid rgba(245,242,237,0.08);
   border-bottom-left-radius: 4px;
+  backdrop-filter: blur(10px);
 }
 
 .msg-user .msg-bubble {
-  background: #2a2a2a;
-  border: 1px solid rgba(245,242,237,0.08);
+  background: rgba(42,42,42,0.9);
+  border: 1px solid rgba(245,242,237,0.06);
   border-bottom-right-radius: 4px;
+  backdrop-filter: blur(10px);
 }
 
 .msg-time {
@@ -147,22 +166,25 @@ body {
 
 .msg-user .msg-time { text-align: right; }
 
+/* TYPING */
 .typing {
   align-self: flex-start;
   display: none;
+  animation: msgIn 0.3s ease;
 }
 
 .typing.show { display: flex; }
 
 .typing-bubble {
-  background: #1a1a1a;
-  border: 1px solid var(--line);
+  background: rgba(26,26,26,0.9);
+  border: 1px solid rgba(245,242,237,0.08);
   border-bottom-left-radius: 4px;
   padding: 14px 18px;
   border-radius: 16px;
   display: flex;
-  gap: 4px;
+  gap: 5px;
   align-items: center;
+  backdrop-filter: blur(10px);
 }
 
 .typing-dot {
@@ -176,23 +198,27 @@ body {
 .typing-dot:nth-child(3) { animation-delay: 0.4s; }
 
 @keyframes typingBounce {
-  0%, 60%, 100% { transform: translateY(0); }
-  30% { transform: translateY(-5px); }
+  0%, 60%, 100% { transform: translateY(0); opacity: 0.5; }
+  30% { transform: translateY(-6px); opacity: 1; }
 }
 
+/* INPUT */
 .input-area {
+  position: relative;
+  z-index: 2;
   padding: 16px;
   border-top: 1px solid var(--line);
   display: flex;
   gap: 12px;
   align-items: flex-end;
   flex-shrink: 0;
-  background: rgba(8,8,8,0.98);
+  background: rgba(8,8,8,0.85);
+  backdrop-filter: blur(20px);
 }
 
 .input-box {
   flex: 1;
-  background: rgba(245,242,237,0.05);
+  background: rgba(245,242,237,0.04);
   border: 1px solid var(--line);
   border-radius: 12px;
   padding: 12px 16px;
@@ -204,12 +230,15 @@ body {
   resize: none;
   min-height: 48px;
   max-height: 120px;
-  transition: border-color 0.3s ease;
+  transition: border-color 0.3s ease, background 0.3s ease;
   cursor: none;
 }
 
 .input-box::placeholder { color: rgba(245,242,237,0.2); }
-.input-box:focus { border-color: rgba(245,242,237,0.3); }
+.input-box:focus {
+  border-color: rgba(245,242,237,0.2);
+  background: rgba(245,242,237,0.06);
+}
 
 .send-btn {
   width: 48px; height: 48px;
@@ -220,22 +249,32 @@ body {
   align-items: center;
   justify-content: center;
   cursor: none;
-  transition: all 0.2s ease;
+  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
   flex-shrink: 0;
 }
 
-.send-btn:hover { background: #ddd; }
+.send-btn:hover { background: #ddd; transform: scale(1.08); }
+.send-btn:active { transform: scale(0.94); }
 
 .send-icon {
-  width: 20px; height: 20px;
+  width: 18px; height: 18px;
   border-right: 2px solid var(--black);
   border-top: 2px solid var(--black);
   transform: rotate(45deg) translate(-2px, 2px);
+}
+
+/* ERROR MSG */
+.error-msg {
+  font-size: 12px;
+  color: #ff6b6b;
+  text-align: center;
+  padding: 8px;
 }
 </style>
 </head>
 <body>
 
+<canvas id="bgCanvas"></canvas>
 <div class="cursor" id="cursor"></div>
 
 <div class="header">
@@ -275,17 +314,70 @@ document.addEventListener('mousemove', e => {
   cursor.style.top = e.clientY - 4 + 'px';
 });
 
-// OBTENER agencia_id DE LA URL
+// ANIMATED GRID BACKGROUND
+const canvas = document.getElementById('bgCanvas');
+const ctx = canvas.getContext('2d');
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+window.addEventListener('resize', () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; });
+
+let time = 0;
+function drawGrid() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  const spacing = 60;
+  const cols = Math.ceil(canvas.width / spacing) + 1;
+  const rows = Math.ceil(canvas.height / spacing) + 1;
+
+  for (let i = 0; i < cols; i++) {
+    for (let j = 0; j < rows; j++) {
+      const x = i * spacing;
+      const y = j * spacing;
+      const wave = Math.sin(time * 0.5 + i * 0.3 + j * 0.3) * 0.5 + 0.5;
+      const opacity = wave * 0.06 + 0.02;
+      ctx.beginPath();
+      ctx.arc(x, y, 1.5, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(245,242,237,${opacity})`;
+      ctx.fill();
+    }
+  }
+
+  // Líneas horizontales animadas
+  for (let j = 0; j < rows; j++) {
+    const y = j * spacing;
+    const wave = Math.sin(time * 0.3 + j * 0.4) * 0.5 + 0.5;
+    ctx.beginPath();
+    ctx.moveTo(0, y);
+    ctx.lineTo(canvas.width, y);
+    ctx.strokeStyle = `rgba(245,242,237,${wave * 0.03})`;
+    ctx.lineWidth = 0.5;
+    ctx.stroke();
+  }
+
+  // Líneas verticales animadas
+  for (let i = 0; i < cols; i++) {
+    const x = i * spacing;
+    const wave = Math.sin(time * 0.3 + i * 0.4) * 0.5 + 0.5;
+    ctx.beginPath();
+    ctx.moveTo(x, 0);
+    ctx.lineTo(x, canvas.height);
+    ctx.strokeStyle = `rgba(245,242,237,${wave * 0.03})`;
+    ctx.lineWidth = 0.5;
+    ctx.stroke();
+  }
+
+  time += 0.02;
+  requestAnimationFrame(drawGrid);
+}
+drawGrid();
+
+// AGENCIA ID DE LA URL
 const urlParams = new URLSearchParams(window.location.search);
 const agenciaId = urlParams.get('agencia') || 'default';
-
-// SESSION ID único por conversación + agencia
 const sessionId = agenciaId + '-' + Math.random().toString(36).substr(2, 9);
 
-// WEBHOOK DE N8N
 const WEBHOOK_URL = 'https://sergioalldream.app.n8n.cloud/webhook/chat-aria';
 
-// MOSTRAR BIENVENIDA
+// BIENVENIDA
 window.addEventListener('load', async () => {
   showTyping();
   await delay(1500);
@@ -302,7 +394,6 @@ async function sendMessage() {
   addMessage('user', text);
   input.value = '';
   input.style.height = 'auto';
-
   showTyping();
 
   try {
@@ -318,37 +409,47 @@ async function sendMessage() {
     });
 
     const data = await response.json();
+    console.log('Respuesta de n8n:', data);
     hideTyping();
 
-    const reply = data.output || data.text || data.message || 'Lo siento, ha habido un error. Por favor intenta de nuevo.';
-    
-    // Limpiar JSON del output si aparece
-    const cleanReply = reply.replace(/```json[\s\S]*?```/g, '').trim();
-    
+    const reply = data.output || data.text || data.message || data.response || '';
+
+    if (!reply) {
+      addMessage('aria', 'Lo siento, ha habido un problema. Por favor intenta de nuevo.');
+      return;
+    }
+
+    // Limpiar JSON y markdown del output
+    const cleanReply = reply
+      .replace(/```json[\s\S]*?```/g, '')
+      .replace(/\*\*(.*?)\*\*/g, '$1')
+      .replace(/\\n/g, '\n')
+      .trim();
+
     addMessage('aria', cleanReply);
 
   } catch(err) {
+    console.error('Error:', err);
     hideTyping();
     addMessage('aria', 'Lo siento, ha habido un problema de conexión. Por favor intenta de nuevo.');
   }
 }
 
-// AÑADIR MENSAJE AL CHAT
 function addMessage(type, text) {
   const messages = document.getElementById('messages');
   const typing = document.getElementById('typing');
-  
+
   const msg = document.createElement('div');
   msg.className = `msg msg-${type}`;
-  
+
   const now = new Date();
   const time = `${now.getHours()}:${String(now.getMinutes()).padStart(2, '0')}`;
-  
+
   msg.innerHTML = `
     <div class="msg-bubble">${text.replace(/\n/g, '<br>')}</div>
     <div class="msg-time">${time}</div>
   `;
-  
+
   messages.insertBefore(msg, typing);
   messages.scrollTop = messages.scrollHeight;
 }
@@ -364,11 +465,8 @@ function hideTyping() {
   document.getElementById('typing').classList.remove('show');
 }
 
-function delay(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
+function delay(ms) { return new Promise(r => setTimeout(r, ms)); }
 
-// EVENTOS
 document.getElementById('sendBtn').addEventListener('click', sendMessage);
 
 document.getElementById('inputBox').addEventListener('keydown', e => {

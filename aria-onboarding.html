@@ -11,13 +11,10 @@
   --black: #080808;
   --white: #F5F2ED;
   --gray: #666;
-  --gray-light: #333;
   --line: rgba(245,242,237,0.1);
-  --accent: #F5F2ED;
 }
 
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-
 html { scroll-behavior: smooth; }
 
 body {
@@ -30,7 +27,6 @@ body {
   cursor: none;
 }
 
-/* CURSOR */
 .cursor {
   width: 8px; height: 8px;
   background: var(--white);
@@ -51,7 +47,6 @@ body {
   mix-blend-mode: difference;
 }
 
-/* CANVAS BG */
 #bgCanvas {
   position: fixed;
   inset: 0;
@@ -60,7 +55,6 @@ body {
   opacity: 0.25;
 }
 
-/* LAYOUT */
 .wrapper {
   position: relative;
   z-index: 1;
@@ -69,9 +63,8 @@ body {
   grid-template-columns: 1fr 1fr;
 }
 
-/* LEFT PANEL */
 .left {
-  padding: 60px 60px;
+  padding: 60px;
   border-right: 1px solid var(--line);
   display: flex;
   flex-direction: column;
@@ -80,8 +73,6 @@ body {
   position: sticky;
   top: 0;
 }
-
-.left-top {}
 
 .logo {
   font-family: 'Bebas Neue', sans-serif;
@@ -94,15 +85,11 @@ body {
   gap: 12px;
 }
 
-.logo-dot {
-  width: 6px; height: 6px;
-  background: var(--white);
-  border-radius: 50%;
-}
+.logo-dot { width: 6px; height: 6px; background: var(--white); border-radius: 50%; }
 
 .left-title {
   font-family: 'Bebas Neue', sans-serif;
-  font-size: clamp(56px, 5vw, 80px);
+  font-size: clamp(48px, 5vw, 72px);
   line-height: 0.95;
   letter-spacing: -1px;
   margin-bottom: 24px;
@@ -119,14 +106,10 @@ body {
   color: var(--gray);
   line-height: 1.8;
   max-width: 360px;
-  margin-bottom: 60px;
+  margin-bottom: 48px;
 }
 
-.left-steps {
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-}
+.left-steps { display: flex; flex-direction: column; gap: 20px; }
 
 .left-step {
   display: flex;
@@ -141,9 +124,7 @@ body {
 .left-step:nth-child(2) { animation-delay: 0.5s; }
 .left-step:nth-child(3) { animation-delay: 0.7s; }
 
-@keyframes slideIn {
-  to { opacity: 1; transform: translateX(0); }
-}
+@keyframes slideIn { to { opacity: 1; transform: translateX(0); } }
 
 .step-num {
   font-family: 'Bebas Neue', sans-serif;
@@ -155,57 +136,17 @@ body {
   padding-top: 2px;
 }
 
-.step-text {
-  font-size: 13px;
-  color: var(--gray);
-  line-height: 1.6;
-}
+.step-text { font-size: 13px; color: var(--gray); line-height: 1.6; }
+.step-text strong { color: var(--white); font-weight: 500; display: block; margin-bottom: 2px; }
+.left-bottom { font-size: 11px; color: rgba(245,242,237,0.2); letter-spacing: 2px; }
 
-.step-text strong {
-  color: var(--white);
-  font-weight: 500;
-  display: block;
-  margin-bottom: 2px;
-}
+.right { padding: 60px; overflow-y: auto; }
 
-.left-bottom {
-  font-size: 11px;
-  color: rgba(245,242,237,0.2);
-  letter-spacing: 2px;
-}
+.form-header { margin-bottom: 48px; opacity: 0; animation: fadeUp 0.6s 0.2s forwards; }
+.form-tag { font-size: 10px; letter-spacing: 4px; text-transform: uppercase; color: var(--gray); margin-bottom: 12px; }
+.form-title { font-family: 'Bebas Neue', sans-serif; font-size: 36px; letter-spacing: 1px; }
 
-/* RIGHT PANEL */
-.right {
-  padding: 60px 60px;
-  overflow-y: auto;
-}
-
-.form-header {
-  margin-bottom: 48px;
-  opacity: 0;
-  animation: fadeUp 0.6s 0.2s forwards;
-}
-
-.form-tag {
-  font-size: 10px;
-  letter-spacing: 4px;
-  text-transform: uppercase;
-  color: var(--gray);
-  margin-bottom: 12px;
-}
-
-.form-title {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 36px;
-  letter-spacing: 1px;
-}
-
-/* FORM */
-form {
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-}
+form { display: flex; flex-direction: column; gap: 0; }
 
 .form-section {
   border-top: 1px solid var(--line);
@@ -218,6 +159,7 @@ form {
 .form-section:nth-child(2) { animation-delay: 0.45s; }
 .form-section:nth-child(3) { animation-delay: 0.6s; }
 .form-section:nth-child(4) { animation-delay: 0.75s; }
+.form-section:nth-child(5) { animation-delay: 0.9s; }
 
 .form-section-title {
   font-family: 'Bebas Neue', sans-serif;
@@ -227,21 +169,9 @@ form {
   margin-bottom: 24px;
 }
 
-.field-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
-}
-
-.field-grid.single {
-  grid-template-columns: 1fr;
-}
-
-.field {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
+.field-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.field-grid.single { grid-template-columns: 1fr; }
+.field { display: flex; flex-direction: column; gap: 8px; }
 
 label {
   font-size: 11px;
@@ -250,7 +180,7 @@ label {
   color: var(--gray);
 }
 
-input, textarea {
+input, select {
   background: transparent;
   border: none;
   border-bottom: 1px solid var(--line);
@@ -264,37 +194,104 @@ input, textarea {
   width: 100%;
 }
 
-input::placeholder, textarea::placeholder {
-  color: rgba(245,242,237,0.2);
-  font-size: 14px;
+input::placeholder { color: rgba(245,242,237,0.2); font-size: 14px; }
+input:focus, select:focus { border-bottom-color: var(--white); }
+
+select option { background: #0D0D0D; color: var(--white); }
+
+.price-row { display: grid; grid-template-columns: 1fr auto 1fr; gap: 16px; align-items: end; }
+.price-separator { font-size: 11px; color: var(--gray); padding-bottom: 14px; text-align: center; }
+
+/* ASESORES */
+.asesores-list { display: flex; flex-direction: column; gap: 24px; }
+
+.asesor-card {
+  background: rgba(245,242,237,0.03);
+  border: 1px solid var(--line);
+  padding: 24px;
+  position: relative;
 }
 
-input:focus, textarea:focus {
-  border-bottom-color: var(--white);
+.asesor-num {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 11px;
+  letter-spacing: 3px;
+  color: var(--gray);
+  margin-bottom: 16px;
 }
 
-input:focus + .field-line,
-input:not(:placeholder-shown) + .field-line {
-  width: 100%;
+.asesor-remove {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: transparent;
+  border: 1px solid rgba(255,100,100,0.3);
+  color: rgba(255,100,100,0.6);
+  font-size: 11px;
+  letter-spacing: 1px;
+  padding: 4px 10px;
+  cursor: none;
+  transition: all 0.2s ease;
+  display: none;
 }
 
-textarea {
-  resize: none;
-  height: 80px;
+.asesor-remove:hover { border-color: #ff6b6b; color: #ff6b6b; }
+
+.add-asesor-btn {
+  background: transparent;
+  border: 1px solid var(--line);
+  color: var(--gray);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 12px 24px;
+  cursor: none;
+  transition: all 0.3s ease;
+  margin-top: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
-.price-row {
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
-  gap: 16px;
-  align-items: end;
+.add-asesor-btn:hover { border-color: var(--white); color: var(--white); }
+
+.add-icon { font-size: 16px; }
+
+/* FUENTE */
+.fuente-options { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 24px; }
+
+.fuente-opt {
+  border: 1px solid var(--line);
+  padding: 20px 16px;
+  text-align: center;
+  cursor: none;
+  transition: all 0.3s ease;
+  position: relative;
 }
 
-.price-separator {
+.fuente-opt input[type="radio"] {
+  position: absolute;
+  opacity: 0;
+  width: 0; height: 0;
+}
+
+.fuente-opt.selected {
+  border-color: var(--white);
+  background: rgba(245,242,237,0.05);
+}
+
+.fuente-icon { font-size: 24px; display: block; margin-bottom: 8px; }
+.fuente-label { font-size: 11px; letter-spacing: 1px; text-transform: uppercase; color: var(--gray); }
+.fuente-opt.selected .fuente-label { color: var(--white); }
+
+.fuente-nota {
   font-size: 11px;
   color: var(--gray);
-  padding-bottom: 14px;
-  text-align: center;
+  line-height: 1.6;
+  padding: 12px;
+  border-left: 2px solid var(--line);
+  margin-top: 12px;
 }
 
 /* SUBMIT */
@@ -302,7 +299,7 @@ textarea {
   padding-top: 48px;
   border-top: 1px solid var(--line);
   opacity: 0;
-  animation: fadeUp 0.6s 0.9s forwards;
+  animation: fadeUp 0.6s 1s forwards;
 }
 
 .submit-btn {
@@ -334,9 +331,7 @@ textarea {
 }
 
 .submit-btn:hover::before { transform: translateX(0); }
-
 .submit-btn:hover { color: var(--white); }
-
 .submit-btn span, .submit-arrow { position: relative; z-index: 1; }
 
 .submit-arrow {
@@ -344,23 +339,30 @@ textarea {
   border-right: 2px solid currentColor;
   border-top: 2px solid currentColor;
   transform: rotate(45deg);
-  transition: transform 0.3s ease;
   flex-shrink: 0;
 }
 
-.submit-btn:hover .submit-arrow {
-  transform: rotate(45deg) translate(3px, -3px);
+.submit-note { text-align: center; font-size: 11px; color: var(--gray); letter-spacing: 1px; margin-top: 16px; }
+
+.field-error { font-size: 10px; color: #ff6b6b; letter-spacing: 1px; margin-top: 4px; display: none; }
+input.error { border-bottom-color: #ff6b6b; }
+
+.loading { display: none; align-items: center; gap: 8px; }
+.loading.show { display: flex; }
+.loading-dot {
+  width: 6px; height: 6px;
+  background: var(--black);
+  border-radius: 50%;
+  animation: loadBounce 1s ease-in-out infinite;
+}
+.loading-dot:nth-child(2) { animation-delay: 0.2s; }
+.loading-dot:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes loadBounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
 }
 
-.submit-note {
-  text-align: center;
-  font-size: 11px;
-  color: var(--gray);
-  letter-spacing: 1px;
-  margin-top: 16px;
-}
-
-/* SUCCESS STATE */
 .success-overlay {
   position: fixed;
   inset: 0;
@@ -377,16 +379,9 @@ textarea {
   transition: opacity 0.5s ease;
 }
 
-.success-overlay.show {
-  opacity: 1;
-  pointer-events: all;
-}
+.success-overlay.show { opacity: 1; pointer-events: all; }
 
-.success-icon {
-  font-size: 48px;
-  margin-bottom: 32px;
-  animation: pulse 2s ease-in-out infinite;
-}
+.success-icon { font-size: 48px; margin-bottom: 32px; animation: pulse 2s ease-in-out infinite; }
 
 @keyframes pulse {
   0%, 100% { transform: scale(1); }
@@ -401,13 +396,7 @@ textarea {
   margin-bottom: 20px;
 }
 
-.success-sub {
-  font-size: 15px;
-  color: var(--gray);
-  max-width: 400px;
-  line-height: 1.7;
-  margin-bottom: 48px;
-}
+.success-sub { font-size: 15px; color: var(--gray); max-width: 400px; line-height: 1.7; margin-bottom: 48px; }
 
 .success-btn {
   display: inline-flex;
@@ -427,60 +416,19 @@ textarea {
 
 .success-btn:hover { background: #ddd; }
 
-/* LOADING */
-.loading {
-  display: none;
-  align-items: center;
-  gap: 8px;
-}
-
-.loading.show { display: flex; }
-
-.loading-dot {
-  width: 6px; height: 6px;
-  background: var(--black);
-  border-radius: 50%;
-  animation: loadBounce 1s ease-in-out infinite;
-}
-
-.loading-dot:nth-child(2) { animation-delay: 0.2s; }
-.loading-dot:nth-child(3) { animation-delay: 0.4s; }
-
-@keyframes loadBounce {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-4px); }
-}
-
-/* ERROR */
-.field-error {
-  font-size: 10px;
-  color: #ff6b6b;
-  letter-spacing: 1px;
-  margin-top: 4px;
-  display: none;
-}
-
-input.error { border-bottom-color: #ff6b6b; }
-
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(16px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* RESPONSIVE */
 @media (max-width: 900px) {
   .wrapper { grid-template-columns: 1fr; }
-  .left {
-    position: relative;
-    min-height: auto;
-    padding: 40px;
-    border-right: none;
-    border-bottom: 1px solid var(--line);
-  }
+  .left { position: relative; min-height: auto; padding: 40px; border-right: none; border-bottom: 1px solid var(--line); }
   .right { padding: 40px; }
   .field-grid { grid-template-columns: 1fr; }
   .price-row { grid-template-columns: 1fr; }
   .price-separator { display: none; }
+  .fuente-options { grid-template-columns: 1fr; }
 }
 </style>
 </head>
@@ -490,61 +438,37 @@ input.error { border-bottom-color: #ff6b6b; }
 <div class="cursor" id="cursor"></div>
 <div class="cursor-follower" id="cursorFollower"></div>
 
-<!-- SUCCESS OVERLAY -->
 <div class="success-overlay" id="successOverlay">
   <div class="success-icon">🏠</div>
   <div class="success-title">Aria está<br>lista</div>
-  <p class="success-sub">
-    Hemos recibido los datos de tu agencia. En menos de 60 segundos Aria estará funcionando con tu información.
-  </p>
-  <a href="https://sergioalldream.app.n8n.cloud/webhook/230db0ff-9060-4446-a502-2c496b9728e4/chat" target="_blank" class="success-btn">
-    Probar Aria ahora →
-  </a>
+  <p class="success-sub">Hemos recibido los datos de tu agencia. En menos de 60 segundos Aria estará funcionando con tu información.</p>
+  <a href="https://sergioalldream.app.n8n.cloud/webhook/230db0ff-9060-4446-a502-2c496b9728e4/chat" target="_blank" class="success-btn">Probar Aria ahora →</a>
 </div>
 
 <div class="wrapper">
-  <!-- LEFT PANEL -->
   <div class="left">
-    <div class="left-top">
-      <div class="logo">
-        <div class="logo-dot"></div>
-        ARIA IA
-      </div>
-      <h1 class="left-title">
-        Configura
-        <span>tu agencia</span>
-      </h1>
-      <p class="left-desc">
-        Rellena el formulario con los datos de tu agencia. En menos de 3 minutos Aria estará lista para atender a tus clientes automáticamente.
-      </p>
+    <div>
+      <div class="logo"><div class="logo-dot"></div>ARIA IA</div>
+      <h1 class="left-title">Configura<span>tu agencia</span></h1>
+      <p class="left-desc">Rellena el formulario con los datos de tu agencia. En menos de 3 minutos Aria estará lista para atender a tus clientes automáticamente.</p>
       <div class="left-steps">
         <div class="left-step">
           <div class="step-num">01</div>
-          <div class="step-text">
-            <strong>Rellena el formulario</strong>
-            Datos básicos de tu agencia, precios y contacto
-          </div>
+          <div class="step-text"><strong>Datos de la agencia</strong>Nombre, teléfonos y horario de atención</div>
         </div>
         <div class="left-step">
           <div class="step-num">02</div>
-          <div class="step-text">
-            <strong>Aria se configura sola</strong>
-            El sistema se actualiza automáticamente en segundos
-          </div>
+          <div class="step-text"><strong>Añade tus asesores</strong>Puedes añadir todos los asesores de tu equipo</div>
         </div>
         <div class="left-step">
           <div class="step-num">03</div>
-          <div class="step-text">
-            <strong>Empieza a recibir clientes</strong>
-            Aria atiende, cualifica y agenda desde el primer momento
-          </div>
+          <div class="step-text"><strong>Aria se activa sola</strong>El sistema se configura automáticamente en segundos</div>
         </div>
       </div>
     </div>
     <div class="left-bottom">© 2026 ARIA IA · AUTOMATIZACIÓN INMOBILIARIA</div>
   </div>
 
-  <!-- RIGHT PANEL -->
   <div class="right">
     <div class="form-header">
       <div class="form-tag">Onboarding · Paso 1 de 1</div>
@@ -552,105 +476,147 @@ input.error { border-bottom-color: #ff6b6b; }
     </div>
 
     <form id="onboardingForm">
-      <!-- AGENCIA -->
+
+      <!-- SECCIÓN 1: AGENCIA -->
       <div class="form-section">
-        <div class="form-section-title">01 · Información General</div>
+        <div class="form-section-title">01 · Información de la Agencia</div>
         <div class="field-grid single">
           <div class="field">
             <label>Nombre de la agencia *</label>
-            <input type="text" name="agencia_nombre" placeholder="Ej: Inmobiliaria Madrid Centro" required>
+            <input type="text" name="agencia_nombre" placeholder="Ej: Inmobiliaria Granada Centro" required>
             <span class="field-error">Este campo es obligatorio</span>
+          </div>
+        </div>
+        <div class="field-grid" style="margin-top: 20px;">
+          <div class="field">
+            <label>Teléfono principal *</label>
+            <input type="tel" name="agencia_telefono" placeholder="+34 958 000 000" required>
+            <span class="field-error">Este campo es obligatorio</span>
+          </div>
+          <div class="field">
+            <label>Teléfono secundario</label>
+            <input type="tel" name="agencia_telefono2" placeholder="+34 600 000 000">
           </div>
         </div>
         <div class="field-grid single" style="margin-top: 20px;">
           <div class="field">
             <label>Zonas de cobertura *</label>
-            <input type="text" name="agencia_zonas" placeholder="Ej: Chamberí, Salamanca, Retiro, Malasaña" required>
+            <input type="text" name="agencia_zonas" placeholder="Ej: La Chana, Zaidín, Centro, Ogíjares" required>
             <span class="field-error">Este campo es obligatorio</span>
           </div>
         </div>
         <div class="field-grid single" style="margin-top: 20px;">
           <div class="field">
-            <label>¿Cómo tienes tu catálogo de propiedades? *</label>
-            <select name="fuente_propiedades" required style="background: transparent; border: none; border-bottom: 1px solid rgba(245,242,237,0.1); color: #F5F2ED; font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 300; padding: 12px 0; outline: none; width: 100%; cursor: none;">
-              <option value="" style="background: #080808;">Selecciona una opción</option>
-              <option value="url" style="background: #080808;">Tengo web con propiedades publicadas</option>
-              <option value="pdf" style="background: #080808;">Tengo un catálogo en PDF</option>
-              <option value="sheet" style="background: #080808;">Lo introduciré en Google Sheets</option>
-            </select>
-            <span class="field-error">Este campo es obligatorio</span>
-          </div>
-        </div>
-        <div class="field-grid single" style="margin-top: 20px;">
-          <div class="field">
-            <label>URL de tu web o enlace al PDF</label>
-            <input type="text" name="fuente_url" placeholder="Ej: https://tuinmobiliaria.com/propiedades">
+            <label>Horario de atención *</label>
+            <input type="text" name="agencia_horario" placeholder="Ej: Lunes a Viernes 9:00-19:00, Sábados 10:00-14:00" required>
             <span class="field-error">Este campo es obligatorio</span>
           </div>
         </div>
       </div>
 
-      <!-- PRECIOS ALQUILER -->
+      <!-- SECCIÓN 2: ASESORES -->
       <div class="form-section">
-        <div class="form-section-title">02 · Rangos de Precio</div>
+        <div class="form-section-title">02 · Asesores del Equipo</div>
+        <div class="asesores-list" id="asesoresList">
+          <div class="asesor-card" data-index="0">
+            <div class="asesor-num">ASESOR 01</div>
+            <button type="button" class="asesor-remove">✕ Eliminar</button>
+            <div class="field-grid">
+              <div class="field">
+                <label>Nombre completo *</label>
+                <input type="text" name="asesor_nombre_0" placeholder="Ej: Juan López" required>
+                <span class="field-error">Obligatorio</span>
+              </div>
+              <div class="field">
+                <label>Teléfono directo *</label>
+                <input type="tel" name="asesor_telefono_0" placeholder="+34 600 000 000" required>
+                <span class="field-error">Obligatorio</span>
+              </div>
+            </div>
+            <div class="field-grid single" style="margin-top: 16px;">
+              <div class="field">
+                <label>Email *</label>
+                <input type="email" name="asesor_email_0" placeholder="juan@tuinmobiliaria.com" required>
+                <span class="field-error">Obligatorio</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button type="button" class="add-asesor-btn" id="addAsesor">
+          <span class="add-icon">+</span> Añadir otro asesor
+        </button>
+      </div>
+
+      <!-- SECCIÓN 3: CATÁLOGO -->
+      <div class="form-section">
+        <div class="form-section-title">03 · Catálogo de Propiedades</div>
+        <p style="font-size: 13px; color: var(--gray); margin-bottom: 24px; line-height: 1.7;">
+          ¿Cómo tienes tus propiedades? Aria las consultará automáticamente en tiempo real.
+        </p>
+
+        <div class="fuente-options" id="fuenteOptions">
+          <label class="fuente-opt selected" id="opt-url">
+            <input type="radio" name="fuente_tipo" value="url" checked>
+            <span class="fuente-icon">🌐</span>
+            <span class="fuente-label">Web</span>
+          </label>
+          <label class="fuente-opt" id="opt-pdf">
+            <input type="radio" name="fuente_tipo" value="pdf">
+            <span class="fuente-icon">📄</span>
+            <span class="fuente-label">PDF / Drive</span>
+          </label>
+          <label class="fuente-opt" id="opt-xml">
+            <input type="radio" name="fuente_tipo" value="xml">
+            <span class="fuente-icon">⚙️</span>
+            <span class="fuente-label">Feed XML</span>
+          </label>
+        </div>
+
+        <div class="field-grid single">
+          <div class="field">
+            <label id="fuenteUrlLabel">URL de tu web de propiedades *</label>
+            <input type="text" name="fuente_url" id="fuenteUrl" placeholder="https://tuinmobiliaria.com/propiedades" required>
+            <span class="field-error">Este campo es obligatorio</span>
+          </div>
+        </div>
+
+        <div class="fuente-nota" id="fuenteNota">
+          Aria consultará tu web en tiempo real para mostrar propiedades actualizadas a cada cliente.
+        </div>
+      </div>
+
+      <!-- SECCIÓN 4: PRECIOS -->
+      <div class="form-section">
+        <div class="form-section-title">04 · Rangos de Precio Orientativos</div>
+        <p style="font-size: 13px; color: var(--gray); margin-bottom: 24px; line-height: 1.7;">
+          Estos rangos ayudan a Aria a orientar al cliente antes de consultar el catálogo.
+        </p>
         <div style="margin-bottom: 20px;">
           <label style="margin-bottom: 12px; display: block;">Alquiler (€/mes)</label>
           <div class="price-row">
             <div class="field">
-              <label>Mínimo *</label>
-              <input type="number" name="agencia_precio_alquiler_min" placeholder="500" required>
+              <label>Mínimo</label>
+              <input type="number" name="precio_alquiler_min" placeholder="400">
             </div>
             <div class="price-separator">—</div>
             <div class="field">
-              <label>Máximo *</label>
-              <input type="number" name="agencia_precio_alquiler_max" placeholder="3000" required>
+              <label>Máximo</label>
+              <input type="number" name="precio_alquiler_max" placeholder="3000">
             </div>
           </div>
         </div>
-        <div style="margin-top: 24px;">
+        <div>
           <label style="margin-bottom: 12px; display: block;">Compra (€)</label>
           <div class="price-row">
             <div class="field">
-              <label>Mínimo *</label>
-              <input type="number" name="agencia_precio_compra_min" placeholder="100000" required>
+              <label>Mínimo</label>
+              <input type="number" name="precio_compra_min" placeholder="80000">
             </div>
             <div class="price-separator">—</div>
             <div class="field">
-              <label>Máximo *</label>
-              <input type="number" name="agencia_precio_compra_max" placeholder="800000" required>
+              <label>Máximo</label>
+              <input type="number" name="precio_compra_max" placeholder="800000">
             </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- ASESOR -->
-      <div class="form-section">
-        <div class="form-section-title">03 · Datos del Asesor</div>
-        <div class="field-grid">
-          <div class="field">
-            <label>Nombre del asesor *</label>
-            <input type="text" name="agencia_asesor_nombre" placeholder="Ej: Juan López" required>
-          </div>
-          <div class="field">
-            <label>Teléfono *</label>
-            <input type="tel" name="agencia_asesor_telefono" placeholder="+34 600 000 000" required>
-          </div>
-        </div>
-        <div class="field-grid single" style="margin-top: 20px;">
-          <div class="field">
-            <label>Email *</label>
-            <input type="email" name="agencia_asesor_email" placeholder="juan@tuinmobiliaria.com" required>
-          </div>
-        </div>
-      </div>
-
-      <!-- HORARIO -->
-      <div class="form-section">
-        <div class="form-section-title">04 · Disponibilidad</div>
-        <div class="field-grid single">
-          <div class="field">
-            <label>Horario de atención *</label>
-            <input type="text" name="agencia_horario" placeholder="Ej: Lunes a Viernes 9:00-18:00" required>
           </div>
         </div>
       </div>
@@ -666,8 +632,9 @@ input.error { border-bottom-color: #ff6b6b; }
           </div>
           <div class="submit-arrow" id="btnArrow"></div>
         </button>
-        <p class="submit-note">Los datos se actualizan automáticamente · Sin contratos</p>
+        <p class="submit-note">Los datos se actualizan automáticamente · Sin contratos · Sin permanencia</p>
       </div>
+
     </form>
   </div>
 </div>
@@ -676,12 +643,10 @@ input.error { border-bottom-color: #ff6b6b; }
 // CURSOR
 const cursor = document.getElementById('cursor');
 const follower = document.getElementById('cursorFollower');
-let mouseX = 0, mouseY = 0;
-let fx = 0, fy = 0;
+let mouseX = 0, mouseY = 0, fx = 0, fy = 0;
 
 document.addEventListener('mousemove', e => {
-  mouseX = e.clientX;
-  mouseY = e.clientY;
+  mouseX = e.clientX; mouseY = e.clientY;
   cursor.style.left = mouseX - 4 + 'px';
   cursor.style.top = mouseY - 4 + 'px';
 });
@@ -694,102 +659,169 @@ document.addEventListener('mousemove', e => {
   requestAnimationFrame(animF);
 })();
 
-// ANIMATED BG
+// BG CANVAS
 const canvas = document.getElementById('bgCanvas');
 const ctx = canvas.getContext('2d');
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
-
-window.addEventListener('resize', () => {
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-});
+window.addEventListener('resize', () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; });
 
 const particles = Array.from({ length: 60 }, () => ({
-  x: Math.random() * canvas.width,
-  y: Math.random() * canvas.height,
-  vx: (Math.random() - 0.5) * 0.2,
-  vy: (Math.random() - 0.5) * 0.2,
-  size: Math.random() * 1.2 + 0.3,
-  opacity: Math.random() * 0.4 + 0.1,
+  x: Math.random() * canvas.width, y: Math.random() * canvas.height,
+  vx: (Math.random() - 0.5) * 0.2, vy: (Math.random() - 0.5) * 0.2,
+  size: Math.random() * 1.2 + 0.3, opacity: Math.random() * 0.4 + 0.1,
 }));
 
 (function draw() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   particles.forEach(p => {
     p.x += p.vx; p.y += p.vy;
-    if (p.x < 0) p.x = canvas.width;
-    if (p.x > canvas.width) p.x = 0;
-    if (p.y < 0) p.y = canvas.height;
-    if (p.y > canvas.height) p.y = 0;
-    ctx.beginPath();
-    ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-    ctx.fillStyle = `rgba(245,242,237,${p.opacity})`;
-    ctx.fill();
+    if (p.x < 0) p.x = canvas.width; if (p.x > canvas.width) p.x = 0;
+    if (p.y < 0) p.y = canvas.height; if (p.y > canvas.height) p.y = 0;
+    ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(245,242,237,${p.opacity})`; ctx.fill();
   });
   particles.forEach((p, i) => {
     particles.slice(i + 1).forEach(p2 => {
-      const dx = p.x - p2.x, dy = p.y - p2.y;
-      const dist = Math.sqrt(dx*dx + dy*dy);
+      const dx = p.x - p2.x, dy = p.y - p2.y, dist = Math.sqrt(dx*dx + dy*dy);
       if (dist < 100) {
-        ctx.beginPath();
-        ctx.moveTo(p.x, p.y);
-        ctx.lineTo(p2.x, p2.y);
-        ctx.strokeStyle = `rgba(245,242,237,${0.05 * (1 - dist/100)})`;
-        ctx.lineWidth = 0.5;
-        ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(p2.x, p2.y);
+        ctx.strokeStyle = `rgba(245,242,237,${0.05 * (1 - dist/100)})`; ctx.lineWidth = 0.5; ctx.stroke();
       }
     });
   });
   requestAnimationFrame(draw);
 })();
 
+// ASESORES DINÁMICOS
+let asesorCount = 1;
+
+document.getElementById('addAsesor').addEventListener('click', () => {
+  const idx = asesorCount++;
+  const card = document.createElement('div');
+  card.className = 'asesor-card';
+  card.dataset.index = idx;
+  card.innerHTML = `
+    <div class="asesor-num">ASESOR 0${idx + 1}</div>
+    <button type="button" class="asesor-remove" onclick="removeAsesor(this)">✕ Eliminar</button>
+    <div class="field-grid">
+      <div class="field">
+        <label>Nombre completo *</label>
+        <input type="text" name="asesor_nombre_${idx}" placeholder="Ej: María García" required>
+        <span class="field-error">Obligatorio</span>
+      </div>
+      <div class="field">
+        <label>Teléfono directo *</label>
+        <input type="tel" name="asesor_telefono_${idx}" placeholder="+34 600 000 000" required>
+        <span class="field-error">Obligatorio</span>
+      </div>
+    </div>
+    <div class="field-grid single" style="margin-top: 16px;">
+      <div class="field">
+        <label>Email *</label>
+        <input type="email" name="asesor_email_${idx}" placeholder="maria@tuinmobiliaria.com" required>
+        <span class="field-error">Obligatorio</span>
+      </div>
+    </div>
+  `;
+  document.getElementById('asesoresList').appendChild(card);
+  card.querySelector('.asesor-remove').style.display = 'block';
+  updateAsesorNums();
+});
+
+function removeAsesor(btn) {
+  btn.closest('.asesor-card').remove();
+  updateAsesorNums();
+}
+
+function updateAsesorNums() {
+  document.querySelectorAll('.asesor-card').forEach((card, i) => {
+    card.querySelector('.asesor-num').textContent = `ASESOR 0${i + 1}`;
+    if (i === 0) card.querySelector('.asesor-remove').style.display = 'none';
+    else card.querySelector('.asesor-remove').style.display = 'block';
+  });
+}
+
+// FUENTE OPTIONS
+const notas = {
+  url: 'Aria consultará tu web en tiempo real para mostrar propiedades actualizadas a cada cliente.',
+  pdf: 'Sube tu catálogo a Google Drive, compártelo y pega aquí el enlace. Aria lo procesará automáticamente.',
+  xml: 'Pega la URL de tu feed XML. Aria lo leerá en tiempo real con todos los datos de tus propiedades.'
+};
+
+const labels = {
+  url: 'URL de tu web de propiedades *',
+  pdf: 'Enlace al PDF en Google Drive *',
+  xml: 'URL del Feed XML *'
+};
+
+const placeholders = {
+  url: 'https://tuinmobiliaria.com/propiedades',
+  pdf: 'https://drive.google.com/file/d/XXXXX/view',
+  xml: 'https://tuinmobiliaria.com/feed.xml'
+};
+
+document.querySelectorAll('.fuente-opt').forEach(opt => {
+  opt.addEventListener('click', () => {
+    document.querySelectorAll('.fuente-opt').forEach(o => o.classList.remove('selected'));
+    opt.classList.add('selected');
+    const val = opt.querySelector('input').value;
+    document.getElementById('fuenteUrlLabel').textContent = labels[val];
+    document.getElementById('fuenteUrl').placeholder = placeholders[val];
+    document.getElementById('fuenteNota').textContent = notas[val];
+  });
+});
+
 // FORM SUBMIT
 document.getElementById('onboardingForm').addEventListener('submit', async function(e) {
   e.preventDefault();
 
-  const btn = document.getElementById('submitBtn');
-  const btnText = document.getElementById('btnText');
-  const loadingDots = document.getElementById('loadingDots');
-  const btnArrow = document.getElementById('btnArrow');
-
-  // Validate
   let valid = true;
   this.querySelectorAll('[required]').forEach(input => {
     if (!input.value.trim()) {
       input.classList.add('error');
-      const errorEl = input.parentElement.querySelector('.field-error');
-      if (errorEl) errorEl.style.display = 'block';
+      const err = input.parentElement.querySelector('.field-error');
+      if (err) err.style.display = 'block';
       valid = false;
     } else {
       input.classList.remove('error');
-      const errorEl = input.parentElement.querySelector('.field-error');
-      if (errorEl) errorEl.style.display = 'none';
+      const err = input.parentElement.querySelector('.field-error');
+      if (err) err.style.display = 'none';
     }
   });
 
   if (!valid) return;
 
-  // Loading state
-  btnText.style.display = 'none';
-  btnArrow.style.display = 'none';
-  loadingDots.classList.add('show');
-  btn.disabled = true;
+  document.getElementById('btnText').style.display = 'none';
+  document.getElementById('btnArrow').style.display = 'none';
+  document.getElementById('loadingDots').classList.add('show');
+  document.getElementById('submitBtn').disabled = true;
 
-  // Collect data
+  // Recoger asesores
+  const asesores = [];
+  document.querySelectorAll('.asesor-card').forEach((card, i) => {
+    asesores.push({
+      nombre: card.querySelector(`[name^="asesor_nombre"]`).value,
+      telefono: card.querySelector(`[name^="asesor_telefono"]`).value,
+      email: card.querySelector(`[name^="asesor_email"]`).value,
+    });
+  });
+
+  const fuenteTipo = document.querySelector('input[name="fuente_tipo"]:checked').value;
+
   const data = {
-    'Nombre de la agencia': this.agencia_nombre.value,
-    'Zonas de cobertura': this.agencia_zonas.value,
-    'Fuente de propiedades': this.fuente_propiedades.value,
-    'URL de propiedades': this.fuente_url.value,
-    'Precio mínimo alquiler (€/mes)': parseInt(this.agencia_precio_alquiler_min.value),
-    'Precio máximo alquiler (€/mes)': parseInt(this.agencia_precio_alquiler_max.value),
-    'Precio mínimo compra (€)': parseInt(this.agencia_precio_compra_min.value),
-    'Precio máximo compra (€)': parseInt(this.agencia_precio_compra_max.value),
-    'Nombre del asesor': this.agencia_asesor_nombre.value,
-    'Email del asesor': this.agencia_asesor_email.value,
-    'Teléfono del asesor': this.agencia_asesor_telefono.value,
-    'Horario de atención': this.agencia_horario.value,
+    agencia_nombre: this.agencia_nombre.value,
+    agencia_telefono: this.agencia_telefono.value,
+    agencia_telefono2: this.agencia_telefono2.value,
+    agencia_zonas: this.agencia_zonas.value,
+    agencia_horario: this.agencia_horario.value,
+    asesores: asesores,
+    fuente_tipo: fuenteTipo,
+    fuente_url: this.fuente_url.value,
+    precio_alquiler_min: parseInt(this.precio_alquiler_min.value) || 0,
+    precio_alquiler_max: parseInt(this.precio_alquiler_max.value) || 0,
+    precio_compra_min: parseInt(this.precio_compra_min.value) || 0,
+    precio_compra_max: parseInt(this.precio_compra_max.value) || 0,
   };
 
   try {
@@ -799,23 +831,20 @@ document.getElementById('onboardingForm').addEventListener('submit', async funct
       body: JSON.stringify(data),
       mode: 'no-cors'
     });
-  } catch (err) {
-    console.log('Enviado');
-  }
+  } catch (err) {}
 
-  // Show success
   setTimeout(() => {
     document.getElementById('successOverlay').classList.add('show');
   }, 1200);
 });
 
 // Remove error on input
-document.querySelectorAll('input').forEach(input => {
-  input.addEventListener('input', function() {
-    this.classList.remove('error');
-    const errorEl = this.parentElement.querySelector('.field-error');
-    if (errorEl) errorEl.style.display = 'none';
-  });
+document.addEventListener('input', function(e) {
+  if (e.target.tagName === 'INPUT') {
+    e.target.classList.remove('error');
+    const err = e.target.parentElement.querySelector('.field-error');
+    if (err) err.style.display = 'none';
+  }
 });
 </script>
 </body>

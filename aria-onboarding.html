@@ -571,9 +571,21 @@ input.error { border-bottom-color: #ff6b6b; }
         </div>
         <div class="field-grid single" style="margin-top: 20px;">
           <div class="field">
-            <label>URL de tu web de propiedades</label>
-              <input type="url" name="agencia_url" placeholder="Ej: https://www.tuinmobiliaria.com/propiedades" required>     
-              <span class="field-error">Este campo es obligatorio</span>
+            <label>¿Cómo tienes tu catálogo de propiedades? *</label>
+            <select name="fuente_propiedades" required style="background: transparent; border: none; border-bottom: 1px solid rgba(245,242,237,0.1); color: #F5F2ED; font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 300; padding: 12px 0; outline: none; width: 100%; cursor: none;">
+              <option value="" style="background: #080808;">Selecciona una opción</option>
+              <option value="url" style="background: #080808;">Tengo web con propiedades publicadas</option>
+              <option value="pdf" style="background: #080808;">Tengo un catálogo en PDF</option>
+              <option value="sheet" style="background: #080808;">Lo introduciré en Google Sheets</option>
+            </select>
+            <span class="field-error">Este campo es obligatorio</span>
+          </div>
+        </div>
+        <div class="field-grid single" style="margin-top: 20px;">
+          <div class="field">
+            <label>URL de tu web o enlace al PDF</label>
+            <input type="text" name="fuente_url" placeholder="Ej: https://tuinmobiliaria.com/propiedades">
+            <span class="field-error">Este campo es obligatorio</span>
           </div>
         </div>
       </div>
@@ -768,7 +780,8 @@ document.getElementById('onboardingForm').addEventListener('submit', async funct
   const data = {
     'Nombre de la agencia': this.agencia_nombre.value,
     'Zonas de cobertura': this.agencia_zonas.value,
-    'URL de tu web de propiedades': this.agencia_url.value,
+    'Fuente de propiedades': this.fuente_propiedades.value,
+    'URL de propiedades': this.fuente_url.value,
     'Precio mínimo alquiler (€/mes)': parseInt(this.agencia_precio_alquiler_min.value),
     'Precio máximo alquiler (€/mes)': parseInt(this.agencia_precio_alquiler_max.value),
     'Precio mínimo compra (€)': parseInt(this.agencia_precio_compra_min.value),

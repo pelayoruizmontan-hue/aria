@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<propiedades>
+  <propiedad>
+    <tipo>alquiler</tipo>
+    <zona>Zaidín</zona>
+    <precio>750</precio>
+    <habitaciones>2</habitaciones>
+    <metros>65</metros>
+    <descripcion>Piso luminoso con ascensor y terraza en el Zaidín</descripcion>
+    <disponible>true</disponible>
+  </propiedad>
+  <propiedad>
+    <tipo>alquiler</tipo>
+    <zona>La Chana</zona>
+    <precio>650</precio>
+    <habitaciones>2</habitaciones>
+    <metros>55</metros>
+    <descripcion>Piso reformado con garaje incluido en La Chana</descripcion>
+    <disponible>true</disponible>
+  </propiedad>
+  <propiedad>
+    <tipo>compra</tipo>
+    <zona>Centro</zona>
+    <precio>185000</precio>
+    <habitaciones>3</habitaciones>
+    <metros>90</metros>
+    <descripcion>Piso amplio en el centro histórico de Granada</descripcion>
+    <disponible>true</disponible>
+  </propiedad>
+</propiedades>

@@ -513,7 +513,19 @@ input.error { border-bottom-color: #ff6b6b; }
           </div>
         </div>
       </div>
-
+      <div class="field-grid single" style="margin-top: 20px;">
+      <div class="field">
+        <label>¿Ofrece servicio de tasación y venta? *</label>
+        <select name="servicio_venta" required style="background: transparent; border: none; border-bottom: 1px solid rgba(245,242,237,0.1); color: #F5F2ED; font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 300; padding: 12px 0; outline: none; width: 100%; cursor: none;">
+          <option value="" style="background: #080808;">Selecciona una opción</option>
+          <option value="SI" style="background: #080808;">Sí, ofrecemos tasaciones gratuitas</option>
+          <option value="NO" style="background: #080808;">No, solo gestionamos compra y alquiler</option>
+        </select>
+        <span class="field-error">Este campo es obligatorio</span>
+      </div>
+    </div>
+      
+      
       <!-- SECCIÓN 2: ASESORES -->
       <div class="form-section">
         <div class="form-section-title">02 · Asesores del Equipo</div>

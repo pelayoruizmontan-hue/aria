@@ -359,9 +359,23 @@ const WEBHOOK_URL = 'https://sergioalldream.app.n8n.cloud/webhook/chat-aria';
 // BIENVENIDA
 window.addEventListener('load', async () => {
   showTyping();
+  
+  // Obtener nombre de la agencia
+  let agenciaNombre = '';
+  try {
+    const res = await fetch(`https://sergioalldream.app.n8n.cloud/webhook/get-agencia-info?agencia=${agenciaId}`);
+    const info = await res.json();
+    agenciaNombre = info.agencia_nombre || '';
+  } catch(e) {}
+
   await delay(1500);
   hideTyping();
-  addMessage('aria', '¡Hola! Soy Aria, tu asistente virtual. Estoy aquí para ayudarte a encontrar la propiedad perfecta. ¿En qué puedo ayudarte hoy?');
+  
+  const saludo = agenciaNombre 
+    ? `¡Hola! 👋 Soy Aria, el asistente virtual de ${agenciaNombre}. Estoy aquí para ayudarte a encontrar la propiedad perfecta. ¿En qué puedo ayudarte hoy?`
+    : '¡Hola! 👋 Soy Aria, tu asistente virtual inmobiliario. ¿En qué puedo ayudarte hoy?';
+  
+  addMessage('aria', saludo);
 });
 
 // ENVIAR MENSAJE
